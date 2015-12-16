@@ -11,7 +11,7 @@
     {
         public GameViewModel()
         {
-            this.ToastMessage();
+            this.ToastMessage("Error", "Content");
         }
     }
 }

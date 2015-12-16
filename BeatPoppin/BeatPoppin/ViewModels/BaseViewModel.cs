@@ -1,13 +1,15 @@
 ﻿namespace BeatPoppin.ViewModels
 {
-    using Microsoft.QueryStringDotNET;
-    using NotificationsExtensions.Toasts;
     using System;
     using System.ComponentModel;
+    using Microsoft.QueryStringDotNET;
+    using NotificationsExtensions.Toasts;
     using Windows.UI.Notifications;
+
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        private const int ToastedMessageExpirationTimeInSeconds = 5;
 
         protected void OnPropertyChanged(string propertyName)
         {
@@ -19,10 +21,10 @@
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected void ToastMessage()
+        protected void ToastMessage(string title, string content)
         {
-            string title = "Andrew sent you a picture";
-            string content = "Check this out, Happy Canyon in Utah!";
+            //    string title = "Andrew sent you a picture";
+            //    string content = "Check this out, Happy Canyon in Utah!";
             string image = "http://blogs.msdn.com/cfs-filesystemfile.ashx/__key/communityserver-blogs-components-weblogfiles/00-00-01-71-81-permanent/2727.happycanyon1_5B00_1_5D00_.jpg";
             string logo = "ms-appdata:///local/Andrew.jpg";
 
@@ -71,7 +73,7 @@
             var toast = new ToastNotification(toastContent.GetXml());
 
             // Providing Expiration Time for Toast notification
-            toast.ExpirationTime = DateTime.Now.AddSeconds(5);
+            toast.ExpirationTime = DateTime.Now.AddSeconds(ToastedMessageExpirationTimeInSeconds);
 
             // provide identity to a toast notification, 
             // in order to target it at a later time, 
