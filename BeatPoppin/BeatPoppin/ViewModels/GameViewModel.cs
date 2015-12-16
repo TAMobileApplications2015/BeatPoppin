@@ -9,12 +9,9 @@
 
     public class GameViewModel : BaseViewModel
     {
-        private TextBlock notificationBox;
-
-        public GameViewModel(TextBlock notificationBox)
+        public GameViewModel()
         {
-            this.notificationBox = notificationBox;
-            this.notificationBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            this.ToastMessage();
         }
     }
 }

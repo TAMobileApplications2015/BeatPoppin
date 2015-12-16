@@ -26,13 +26,12 @@ namespace BeatPoppin.Pages
         public HomePage()
         {
             this.InitializeComponent();
+            this.DataContext = new HomeViewModel();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var notificationBox = e.Parameter as TextBlock;
 
-            this.DataContext = new HomeViewModel(notificationBox);
         }
     }
 }

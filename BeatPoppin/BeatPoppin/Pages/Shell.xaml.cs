@@ -26,13 +26,12 @@ namespace BeatPoppin.Pages
         public Shell()
         {
             this.InitializeComponent();
-
-            var notificationBox = this.tbNotification;
+            
             var root = this.root;
 
-            this.DataContext = new ShellViewModel(root, notificationBox);
+            this.DataContext = new ShellViewModel(root);
 
-            this.root.Navigate(typeof(HomePage), notificationBox);
+            this.root.Navigate(typeof(HomePage));
         }
     }
 }

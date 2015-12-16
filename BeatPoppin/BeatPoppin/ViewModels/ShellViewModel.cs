@@ -13,17 +13,15 @@
     public class ShellViewModel
     {
         private Frame root;
-        private TextBlock notificationBox;
         private ICommand playCommand;
         private ICommand homeCommand;
         private ICommand helpCommand;
         private ICommand aboutUsCommand;
         private ICommand showMoreCommand;
 
-        public ShellViewModel(Frame root, TextBlock notificationBox)
+        public ShellViewModel(Frame root)
         {
             this.root = root;
-            this.notificationBox = notificationBox;
         }
 
         public ICommand ShowMore
@@ -37,13 +35,6 @@
 
                 return this.showMoreCommand;
             }
-        }
-
-        private void ExecShowMore(object obj)
-        {
-            var splitViewContainer = obj as SplitView;
-            splitViewContainer.OpenPaneLength = splitViewContainer.ActualWidth;
-            splitViewContainer.IsPaneOpen = !splitViewContainer.IsPaneOpen;
         }
 
         public ICommand Home
@@ -98,24 +89,31 @@
             }
         }
 
+        private void ExecShowMore(object obj)
+        {
+            var splitViewContainer = obj as SplitView;
+            splitViewContainer.OpenPaneLength = splitViewContainer.ActualWidth;
+            splitViewContainer.IsPaneOpen = !splitViewContainer.IsPaneOpen;
+        }
+
         private void ExecPlay()
         {
-            root.Navigate(typeof(GamePage), this.notificationBox);
+            root.Navigate(typeof(GamePage));
         }
 
         private void ExecHome()
         {
-            root.Navigate(typeof(HomePage), this.notificationBox);
+            root.Navigate(typeof(HomePage));
         }
 
         private void ExecHelp()
         {
-            root.Navigate(typeof(HelpPage), this.notificationBox);
+            root.Navigate(typeof(HelpPage));
         }
 
         private void ExecAboutUs()
         {
-            root.Navigate(typeof(AboutUsPage), this.notificationBox);
+            root.Navigate(typeof(AboutUsPage));
         }
     }
 }

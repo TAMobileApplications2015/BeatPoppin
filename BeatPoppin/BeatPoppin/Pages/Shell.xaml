@@ -33,18 +33,11 @@
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
             <RowDefinition Height="1*"/>
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="tbNotification"
-                   Text="Example:No Connection"
-                   Visibility="Collapsed"
-                   VerticalAlignment="Top"
-                   Grid.Row="0"
-                   Grid.Column="0"/>
         <Frame x:Name="root"
-               Grid.Row="1"
+               Grid.Row="0"
                Grid.Column="0">
             <Frame.ContentTransitions>
                 <TransitionCollection>
@@ -57,7 +50,7 @@
             </Frame.ContentTransitions>
         </Frame>
         <Grid Canvas.ZIndex="1"
-              Grid.Row="2"
+              Grid.Row="1"
               Grid.Column="0">
             <SplitView x:Name="svShowMore"
                    HorizontalAlignment="Stretch"
@@ -85,7 +78,7 @@
                                 Grid.Column="1">
                             <Button Content="Home"
                     Style="{StaticResource homeButtonStyle}"
-                    Command="{Binding Help}"/>
+                    Command="{Binding Home}"/>
                             <StackPanel Orientation="Horizontal"
                                 Grid.Column="1">
                                 <Button Content="Help"

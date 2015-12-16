@@ -26,24 +26,19 @@ namespace BeatPoppin.Pages
         public GamePage()
         {
             this.InitializeComponent();
+            this.DataContext = new GameViewModel();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var notificationBox = e.Parameter as TextBlock;
-            if (notificationBox == null)
-            {
-                return;
-            }
-
-            var gameViewModel = new GameViewModel(notificationBox);
-
-            this.DataContext = gameViewModel;
+            // DATACONTEXT IS THE PREVIOUS DATACONTEXT
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
+            // DATACONTEXT IS THE CURRENT DATACONTEXT ( GAMEVIEWMODEL )
             var gameViewModel = this.DataContext as GameViewModel;
+
         }
     }
 }

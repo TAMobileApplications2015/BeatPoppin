@@ -12,12 +12,5 @@ namespace BeatPoppin.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
-        private TextBlock notificationBox;
-
-        public HomeViewModel(TextBlock notificationBox)
-        {
-            this.notificationBox = notificationBox;
-            this.notificationBox.Visibility = Windows.UI.Xaml.Visibility.Visible;
-        }
     }
 }
