@@ -1,0 +1,42 @@
+﻿<Page
+    x:Class="BeatPoppin.Pages.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BeatPoppin.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <Style TargetType="StackPanel" x:Name="DefaultContainerStyle">
+            <Setter Property="BorderBrush"
+                    Value="Black"/>
+            <Setter Property="BorderThickness"
+                    Value="5"/>
+            <Setter Property="Margin"
+                    Value="5"/>
+            <Setter Property="Width"
+                    Value="150"/>
+            <Setter Property="HorizontalAlignment"
+                    Value="Center"/>
+        </Style>
+    </Page.Resources>
+    <Grid VerticalAlignment="Center"
+          HorizontalAlignment="Center">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0"
+                        Style="{StaticResource DefaultContainerStyle}">
+                <TextBlock Text="Play Your Music"
+                           TextAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1"
+                        Style="{StaticResource DefaultContainerStyle}">
+                <TextBlock Text="Current Highscore"
+                           TextAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
