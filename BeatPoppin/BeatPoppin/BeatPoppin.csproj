@@ -100,6 +100,16 @@
     </Compile>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\RelayCommandWithParams.cs" />
+    <Compile Include="Data\Contracts\IRepository.cs" />
+    <Compile Include="Data\LocalData.cs" />
+    <Compile Include="Data\LocalDb.cs" />
+    <Compile Include="Data\LocalGenericRepository.cs" />
+    <Compile Include="Data\Models\GameScore.cs" />
+    <Compile Include="Data\Models\HighScore.cs" />
+    <Compile Include="Data\Models\User.cs" />
+    <Compile Include="Data\RemoteData.cs" />
+    <Compile Include="Data\RemoteDb.cs" />
+    <Compile Include="Data\RemoteGenericRepository.cs" />
     <Compile Include="Pages\AboutUsPage.xaml.cs">
       <DependentUpon>AboutUsPage.xaml</DependentUpon>
     </Compile>
@@ -118,6 +128,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
+    <Compile Include="ViewModels\HelpPageViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
   </ItemGroup>

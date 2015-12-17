@@ -9,8 +9,10 @@
     using Windows.UI.Xaml.Controls;
     using Commands;
     using Pages;
+    using Data;
+    using Data.Models;
 
-    public class ShellViewModel
+    public class AppShellViewModel
     {
         private Frame root;
         private ICommand playCommand;
@@ -19,7 +21,7 @@
         private ICommand aboutUsCommand;
         private ICommand showMoreCommand;
 
-        public ShellViewModel(Frame root)
+        public AppShellViewModel(Frame root)
         {
             this.root = root;
         }
@@ -96,7 +98,7 @@
             splitViewContainer.IsPaneOpen = !splitViewContainer.IsPaneOpen;
         }
 
-        private void ExecPlay()
+        private async void ExecPlay()
         {
             root.Navigate(typeof(GamePage));
         }

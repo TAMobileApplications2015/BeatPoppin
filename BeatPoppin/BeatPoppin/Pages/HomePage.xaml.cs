@@ -26,7 +26,19 @@ namespace BeatPoppin.Pages
         public HomePage()
         {
             this.InitializeComponent();
-            this.DataContext = new HomeViewModel();
+            this.ViewModel = new HomeViewModel();
+        }
+
+        public HomeViewModel ViewModel
+        {
+            get
+            {
+                return this.DataContext as HomeViewModel;
+            }
+            set
+            {
+                this.DataContext = value;
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

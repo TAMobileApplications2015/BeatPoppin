@@ -26,19 +26,34 @@ namespace BeatPoppin.Pages
         public GamePage()
         {
             this.InitializeComponent();
-            this.DataContext = new GameViewModel();
+            this.ViewModel = new GameViewModel();
+        }
+
+        public GameViewModel ViewModel
+        {
+            get
+            {
+                return this.DataContext as GameViewModel;
+            }
+            set
+            {
+                this.DataContext = value;
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            // DATACONTEXT IS THE PREVIOUS DATACONTEXT
+
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
-            // DATACONTEXT IS THE CURRENT DATACONTEXT ( GAMEVIEWMODEL )
-            var gameViewModel = this.DataContext as GameViewModel;
 
+        }
+
+        private void Rectangle_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            this.ViewModel.TestRectangleTapped.Execute(sender);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using BeatPoppin.Pages;
+﻿using BeatPoppin.Data;
+using BeatPoppin.Pages;
+using Parse;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,6 +36,10 @@ namespace BeatPoppin
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            // INITIALIZING PARSE.COM SERVER CLIENT
+            var remoteServer = new RemoteDb();
+            remoteServer.Init();
         }
 
         /// <summary>

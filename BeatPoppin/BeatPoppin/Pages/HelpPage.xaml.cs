@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatPoppin.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,19 @@ namespace BeatPoppin.Pages
         public HelpPage()
         {
             this.InitializeComponent();
+            this.ViewModel = new HelpPageViewModel();
+        }
+
+        public HelpPageViewModel ViewModel
+        {
+            get
+            {
+                return this.DataContext as HelpPageViewModel;
+            }
+            set
+            {
+                this.DataContext = value;
+            }
         }
     }
 }

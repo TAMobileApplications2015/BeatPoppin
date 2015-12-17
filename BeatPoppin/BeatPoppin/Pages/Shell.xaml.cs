@@ -29,7 +29,7 @@ namespace BeatPoppin.Pages
             
             var root = this.root;
 
-            this.DataContext = new ShellViewModel(root);
+            this.DataContext = new AppShellViewModel(root);
 
             this.root.Navigate(typeof(HomePage));
         }
