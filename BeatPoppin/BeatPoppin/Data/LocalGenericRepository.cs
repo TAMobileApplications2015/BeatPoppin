@@ -29,6 +29,10 @@
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             var result = await this.dbConnection.Table<T>().ToListAsync();
+            if (result == null)
+            {
+                result = new List<T>();
+            }
 
             return result;
         }
@@ -36,6 +40,10 @@
         public async Task<T> GetByIdAsync(object id)
         {
             var result = await this.dbConnection.FindAsync<T>(id);
+            if (result == null)
+            {
+                result = default(T);
+            }
 
             return result;
         }
