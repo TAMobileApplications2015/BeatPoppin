@@ -6,9 +6,10 @@
     using System.Threading.Tasks;
     using Contracts;
     using Models;
-
+    using System.Numerics;
     public class LocalData
     {
+        private BigInteger bigInt;
         private LocalDb context;
         private readonly IDictionary<Type, object> repositories = new Dictionary<Type, object>();
 
@@ -28,8 +29,9 @@
         public async Task<GameScore> GetCurrentHighScoreAsync()
         {
             var score = (await this.Highscores.GetAllAsync())
-                            .OrderByDescending(x => x.Value)
-                            .FirstOrDefault();
+                .OrderByDescending(h => h.Value)
+                .FirstOrDefault();
+
             return score;
         }
 

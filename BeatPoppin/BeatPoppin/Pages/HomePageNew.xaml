@@ -6,20 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Page.Resources>
-        <Style TargetType="StackPanel" x:Name="DefaultContainerStyle">
-            <Setter Property="BorderBrush"
-                    Value="Black"/>
-            <Setter Property="BorderThickness"
-                    Value="5"/>
-            <Setter Property="Margin"
-                    Value="5"/>
-            <Setter Property="Width"
-                    Value="150"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Center"/>
-        </Style>
-    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -55,7 +41,7 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Column="0"
                         Grid.ColumnSpan="2"
-                            Style="{StaticResource DefaultContainerStyle}">
+                        Style="{StaticResource DefaultHomeContainerStyle}">
                 <TextBlock Text="Play Your Music"
                            TextAlignment="Center"/>
             </StackPanel>
@@ -78,7 +64,7 @@
             <MediaElement Name="mediaElement"/>
             <StackPanel Grid.Column="2"
                         Grid.ColumnSpan="2"
-                        Style="{StaticResource DefaultContainerStyle}">
+                        Style="{StaticResource DefaultHomeContainerStyle}">
                 <TextBlock Text="Current Highscore"
                            TextAlignment="Center"/>
             </StackPanel>

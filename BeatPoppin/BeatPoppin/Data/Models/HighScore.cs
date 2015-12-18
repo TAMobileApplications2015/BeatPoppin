@@ -11,10 +11,10 @@
     public class HighScore : ParseObject
     {
         [ParseFieldName("value")]
-        public int Value
+        public long Value
         {
-            get { return GetProperty<int>(); }
-            set { SetProperty<int>(value); }
+            get { return GetProperty<long>(); }
+            set { SetProperty<long>(value); }
         }
     }
 }

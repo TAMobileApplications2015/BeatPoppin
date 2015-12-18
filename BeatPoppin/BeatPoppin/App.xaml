@@ -5,11 +5,10 @@
     xmlns:local="using:BeatPoppin"
     RequestedTheme="Light">
     <Application.Resources>
-        <Style x:Name="defaultButtonStyle"  TargetType="Button">
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Center"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

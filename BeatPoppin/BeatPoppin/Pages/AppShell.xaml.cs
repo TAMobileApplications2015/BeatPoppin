@@ -18,20 +18,19 @@ using Windows.UI.Xaml.Navigation;
 
 namespace BeatPoppin.Pages
 {
+    //public static AppShell Current = null;
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Shell : Page
+    public sealed partial class AppShell : Page
     {
-        public Shell()
+        public AppShell()
         {
             this.InitializeComponent();
-            
-            var root = this.root;
 
-            this.DataContext = new AppShellViewModel(root);
-
-            this.root.Navigate(typeof(HomePage));
+            this.DataContext = new AppShellViewModel();
         }
+
+        public new Frame Frame { get { return this.frame; } }
     }
 }

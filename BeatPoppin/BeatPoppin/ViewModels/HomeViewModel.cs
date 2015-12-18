@@ -13,9 +13,33 @@
 
     public class HomeViewModel : BaseViewModel
     {
+        private LocalData localData;
+        private RemoteData remoteData;
+        private long? localPlayerCurrentHighscore;
+        private List<StorageFile> playlist;
         private ICommand chooseMusicCommand;
         private ICommand playMusicCommand;
-        private List<StorageFile> playlist;
+
+        public HomeViewModel()
+        {
+            this.localData = new LocalData(new LocalDb());
+            this.remoteData = new RemoteData();
+
+            this.RefreshLocalScoreAsync();
+        }
+
+        public long? LocalPlayerCurrentHighscore
+        {
+            get
+            {
+                return this.localPlayerCurrentHighscore;
+            }
+            set
+            {
+                this.localPlayerCurrentHighscore = value;
+                this.OnPropertyChanged("LocalPlayerCurrentHighscore");
+            }
+        }
 
         public ICommand ChooseMusic
         {
@@ -64,7 +88,6 @@
             }
         }
 
-
         private async void ExecPlayMusic()
         {
             var storageFile = await StorageFile.GetFileFromPathAsync(this.playlist[0].Path);
@@ -73,6 +96,18 @@
             //mediaElement.SetSource(stream, storageFile.ContentType);
 
             //mediaElement.Play();
+        }
+
+        public async void RefreshLocalScoreAsync()
+        {
+            var localHighScore = await this.localData.GetCurrentHighScoreAsync();
+            this.LocalPlayerCurrentHighscore = localHighScore.Value;
+        }
+
+        public async void RefreshRemotScoreAsync()
+        {
+            var remoteHighScore = await this.remoteData.GetCurrentHighScoreAsync();
+            var remoteUserHighScore = await this.remoteData.GetUserForScoreAsync(remoteHighScore);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace BeatPoppin.Pages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-
+            this.ViewModel.RefreshLocalScoreAsync();
         }
     }
 }

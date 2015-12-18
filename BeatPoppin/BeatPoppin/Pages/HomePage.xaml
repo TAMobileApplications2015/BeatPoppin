@@ -6,20 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Page.Resources>
-        <Style TargetType="StackPanel" x:Name="DefaultContainerStyle">
-            <Setter Property="BorderBrush"
-                    Value="Black"/>
-            <Setter Property="BorderThickness"
-                    Value="5"/>
-            <Setter Property="Margin"
-                    Value="5"/>
-            <Setter Property="Width"
-                    Value="150"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Center"/>
-        </Style>
-    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -35,9 +21,10 @@
             <TextBlock Text="Your Highscore"
                        FontSize="36"
                        Grid.Row="0"/>
-            <TextBlock Text="{Binding PlayerCurrentHighscore}" 
+            <TextBlock Text="{Binding LocalPlayerCurrentHighscore}" 
                        Grid.Row="1"
-                       FontSize="28"/>
+                       FontSize="28"
+                       TextAlignment="Center"/>
         </Grid>
         <Grid HorizontalAlignment="Center"
               VerticalAlignment="Center"
@@ -47,12 +34,13 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0"
-                            Style="{StaticResource DefaultContainerStyle}">
+                            Style="{StaticResource DefaultHomeContainerStyle}">
                 <TextBlock Text="Play Your Music"
                            TextAlignment="Center"/>
+                
             </StackPanel>
             <StackPanel Grid.Column="1"
-                        Style="{StaticResource DefaultContainerStyle}">
+                        Style="{StaticResource DefaultHomeContainerStyle}">
                 <TextBlock Text="Current Highscore"
                            TextAlignment="Center"/>
             </StackPanel>

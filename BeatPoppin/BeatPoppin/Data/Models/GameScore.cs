@@ -10,6 +10,6 @@
         public int Id { get; set; }
 
         [NotNull]
-        public int Value { get; set; }
+        public long Value { get; set; }
     }
 }

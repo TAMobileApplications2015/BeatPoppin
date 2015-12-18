@@ -1,0 +1,46 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BeatPoppin">
+    <Style x:Name="defaultButtonStyle"  TargetType="Button">
+        <Setter Property="HorizontalAlignment"
+                    Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment"
+                    Value="Center"/>
+    </Style>
+    <Style TargetType="Button" x:Key="DefaultButtonStyle" BasedOn="{StaticResource defaultButtonStyle}">
+        <Setter Property="Margin"
+                    Value="5" />
+        <Setter Property="Foreground"
+                    Value="Black"/>
+        <Setter Property="Background"
+                    Value="Transparent" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="Red" Offset="0.0"/>
+                    <GradientStop Color="Orange" Offset="0.17"/>
+                    <GradientStop Color="Yellow" Offset="0.33"/>
+                    <GradientStop Color="Green" Offset="0.5"/>
+                    <GradientStop Color="Blue" Offset="0.67"/>
+                    <GradientStop Color="Indigo" Offset="0.83"/>
+                    <GradientStop Color="Violet" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderThickness"
+                    Value="5"/>
+    </Style>
+    <Style TargetType="StackPanel" x:Key="DefaultHomeContainerStyle">
+        <Setter Property="BorderBrush"
+                    Value="Black"/>
+        <Setter Property="BorderThickness"
+                    Value="5"/>
+        <Setter Property="Margin"
+                    Value="5"/>
+        <Setter Property="Width"
+                    Value="150"/>
+        <Setter Property="HorizontalAlignment"
+                    Value="Center"/>
+    </Style>
+</ResourceDictionary>
