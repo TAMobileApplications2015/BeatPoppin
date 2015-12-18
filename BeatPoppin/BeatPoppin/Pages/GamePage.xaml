@@ -17,8 +17,7 @@
                 Grid.Column="0">
             <Rectangle Height="150"
                        Width="150"
-                       Fill="Wheat"
-                       PointerPressed="Rectangle_PointerPressed"/>
+                       Fill="Wheat"/>
         </Canvas>
         <TextBlock Text="{Binding testHighScore,
             Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
