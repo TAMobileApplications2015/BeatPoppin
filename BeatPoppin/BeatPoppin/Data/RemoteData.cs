@@ -21,6 +21,14 @@
             await score.SaveAsync();
         }
 
+        public async Task<ParseObject> GetUserForScoreAsync(HighScore score)
+        {
+            var user = score.Get<ParseObject>("parent");
+            user = await user.FetchIfNeededAsync();
+            return user;
+        }
+
+        // NOT WORKING
         public async Task<IEnumerable<ParseObject>> GetAllScoresForUserAsync(User user)
         {
             var query = ParseObject.GetQuery("Game").WhereEqualTo("parent", user);

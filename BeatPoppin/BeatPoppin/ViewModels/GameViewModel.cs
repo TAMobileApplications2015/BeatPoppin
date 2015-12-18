@@ -40,7 +40,7 @@
             set
             {
                 this.testHighScoreVal = value;
-                this.OnPropertyChanged("HighScore");
+                this.OnPropertyChanged("testHighScore");
             }
         }
 
@@ -59,26 +59,28 @@
 
         private async void testRectangleTappedExec()
         {
-            //await this.localData.Highscores.AddAsync(new GameScore() { Value = score.Value + 1 });
+            //await this.localData.Highscores.AddAsync(new GameScore() { Value = 101 });
 
             //var user = new User()
             //{
-            //    DisplayName = "Try2"
+            //    DisplayName = "FromScoreGetUser"
             //};
             //await this.remoteData.Users.AddAsync(user);
 
-            //var remoteHighscore = new HighScore() { Value = 100 };
+            //var remoteHighscore = new HighScore() { Value = 101 };
             //await this.remoteData.Highscores.AddAsync(remoteHighscore);
 
             //await this.remoteData.AddScoreToUserAsync(remoteHighscore, user);
 
-            //var user2 = await this.remoteData.Users.GetByIdAsync("y1zvbIrEuz");
+            ////var user2 = await this.remoteData.Users.GetByIdAsync("y1zvbIrEuz");
 
-            //var result = await this.remoteData.GetAllScoresForUserAsync(user2);
+            ////var result = await this.remoteData.GetAllScoresForUserAsync(user2);
 
             //var curr = await this.remoteData.GetCurrentHighScoreAsync();
+            //var user2 = await this.remoteData.GetUserForScoreAsync(curr);
 
-            //this.HighScore = score.Value;
+            //int gg = 5;
+            //this.testHighScore = (await this.localData.GetCurrentHighScoreAsync()).Value;
         }
     }
 }
