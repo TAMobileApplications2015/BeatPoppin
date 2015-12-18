@@ -16,14 +16,18 @@
         private LocalData localData;
         private RemoteData remoteData;
         private long? localPlayerCurrentHighscore;
-        private List<StorageFile> playlist;
+        private List<StorageFile> playList;
+        private string musicPlayList;
         private ICommand chooseMusicCommand;
         private ICommand playMusicCommand;
+        private ICommand stopMusicCommand;
+        private MediaElement musicPlayer;
 
         public HomeViewModel()
         {
             this.localData = new LocalData(new LocalDb());
             this.remoteData = new RemoteData();
+            this.playList = new List<StorageFile>();
 
             this.RefreshLocalScoreAsync();
         }
@@ -67,35 +71,80 @@
             }
         }
 
+        public ICommand StopMusic
+        {
+            get
+            {
+                if (this.stopMusicCommand == null)
+                {
+                    this.stopMusicCommand = new RelayCommand(this.ExecStopMusic);
+                }
+
+                return this.stopMusicCommand;
+            }
+        }
+
+        private void ExecStopMusic()
+        {
+            if (this.musicPlayer != null)
+            {
+                this.musicPlayer.Stop();
+            }
+        }
+
+        public string MusicPlayList
+        {
+            get
+            {
+                return this.musicPlayList;
+            }
+            private set
+            {
+                this.musicPlayList = value;
+                this.OnPropertyChanged("MusicPlayList");
+            }
+        }
+
         private async void ExecChooseMusic()
         {
             var openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.List;
             openPicker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
             openPicker.FileTypeFilter.Add(".mp3");
+            var result = new StringBuilder();
 
             var files = await openPicker.PickMultipleFilesAsync();
             if (files != null)
             {
                 foreach (var file in files)
                 {
-                    this.playlist.Add(file);
+                    this.playList.Add(file);
+                    result.AppendLine(file.Name);
                 }
+
+                this.MusicPlayList = result.ToString();
             }
             else
             {
-                // Operation cancelled
+                this.MusicPlayList = "No selected songs";
             }
         }
 
         private async void ExecPlayMusic()
         {
-            var storageFile = await StorageFile.GetFileFromPathAsync(this.playlist[0].Path);
-            var stream = await storageFile.OpenAsync(FileAccessMode.Read);
+            if (this.playList.Count > 0)
+            {
+                // TODO Grant access
+                var storageFile = await StorageFile.GetFileFromPathAsync(this.playList[0].Path);
+                var stream = await storageFile.OpenAsync(FileAccessMode.Read);
+                if (this.musicPlayer == null)
+                {
+                    this.musicPlayer = new MediaElement();
+                }
+                this.musicPlayer.SetSource(stream, storageFile.ContentType);
 
-            //mediaElement.SetSource(stream, storageFile.ContentType);
-
-            //mediaElement.Play();
+                this.musicPlayer.Play();
+            }
         }
 
         public async void RefreshLocalScoreAsync()
