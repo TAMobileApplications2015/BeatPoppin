@@ -28,8 +28,12 @@
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            var result = await this.dbConnection.Table<T>().ToListAsync();
-            if (result == null)
+            IEnumerable<T> result;
+            try
+            {
+                result = await this.dbConnection.Table<T>().ToListAsync();
+            }
+            catch (System.Exception)
             {
                 result = new List<T>();
             }

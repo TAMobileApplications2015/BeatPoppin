@@ -2,7 +2,7 @@
 {
     using SQLite.Net.Attributes;
 
-    [Table("Highscore")]
+    [Table("GameScore")]
     public class GameScore
     {
         [PrimaryKey]
