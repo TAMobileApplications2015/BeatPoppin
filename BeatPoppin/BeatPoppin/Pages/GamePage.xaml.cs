@@ -50,10 +50,5 @@ namespace BeatPoppin.Pages
         {
 
         }
-
-        private void Rectangle_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            this.ViewModel.TestRectangleTapped.Execute(sender);
-        }
     }
 }

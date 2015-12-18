@@ -6,10 +6,9 @@
     using System.Threading.Tasks;
     using Contracts;
     using Models;
-    using System.Numerics;
+
     public class LocalData
     {
-        private BigInteger bigInt;
         private LocalDb context;
         private readonly IDictionary<Type, object> repositories = new Dictionary<Type, object>();
 
