@@ -166,7 +166,7 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <Image Source="{Binding RemoteHighScoreUserImageSource}"
+                        <TextBlock Text="ImageHere"
                                Grid.Column="1"
                                Grid.RowSpan="4"/>
                         <TextBlock Text="Name"
