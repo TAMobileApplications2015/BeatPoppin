@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Capture;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,6 +28,18 @@ namespace BeatPoppin.Pages
         {
             this.InitializeComponent();
             this.ViewModel = new GameViewModel();
+            this.LoadPreviewAsBackground();
+        }
+
+        private async void LoadPreviewAsBackground()
+        {
+            // Using Windows.Media.Capture.MediaCapture APIs to stream from webcam
+            MediaCapture mediaCaptureMgr = new MediaCapture();
+            await mediaCaptureMgr.InitializeAsync();
+
+            // Start capture preview.                
+            myCaptureElement.Source = mediaCaptureMgr;
+            await mediaCaptureMgr.StartPreviewAsync();
         }
 
         public GameViewModel ViewModel
