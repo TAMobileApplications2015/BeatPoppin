@@ -29,18 +29,28 @@
             </Setter.Value>
         </Setter>
         <Setter Property="BorderThickness"
-                    Value="5"/>
+                    Value="1"/>
+    </Style>
+    <Style TargetType="Button" x:Key="DefaultNavigationButtonStyle" BasedOn="{StaticResource DefaultButtonStyle}">
+        <Setter Property="Width"
+                Value="100"/>
+        <Setter Property="FontSize"
+                Value="18"/>
+    </Style>
+    <Style TargetType="Button" x:Key="NavigationButtonPlayStyle" BasedOn="{StaticResource DefaultButtonStyle}">
+        <Setter Property="Width"
+                Value="200"/>
+        <Setter Property="FontSize"
+                Value="22"/>
     </Style>
     <Style TargetType="Grid" x:Key="DefaultHomeContainerStyle">
         <Setter Property="BorderBrush"
-                    Value="Black"/>
+                    Value="Gray"/>
         <Setter Property="BorderThickness"
-                    Value="5"/>
+                    Value="2"/>
         <Setter Property="Margin"
                     Value="5"/>
         <Setter Property="Width"
-                    Value="250"/>
-        <Setter Property="HorizontalAlignment"
-                    Value="Center"/>
+                Value="400"/>
     </Style>
 </ResourceDictionary>

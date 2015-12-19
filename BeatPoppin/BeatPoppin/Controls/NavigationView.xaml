@@ -5,9 +5,7 @@
     xmlns:local="using:BeatPoppin.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    mc:Ignorable="d">
     <Grid>
         <Grid Canvas.ZIndex="1"
               Grid.Row="1"
@@ -39,17 +37,14 @@
                         <StackPanel Orientation="Horizontal"
                                     Grid.Column="1">
                             <Button Content="Home"
-                                    Style="{StaticResource DefaultButtonStyle}"
+                                    Style="{StaticResource DefaultNavigationButtonStyle}"
                                     Tapped="Home"/>
-                            <StackPanel Orientation="Horizontal"
-                                        Grid.Column="1">
-                                <Button Content="Help"
-                                        Style="{StaticResource DefaultButtonStyle}"
+                            <Button Content="Help"
+                                        Style="{StaticResource DefaultNavigationButtonStyle}"
                                         Tapped="Help"/>
-                                <Button Content="About Us"
-                                        Style="{StaticResource DefaultButtonStyle}"
+                            <Button Content="About Us"
+                                        Style="{StaticResource DefaultNavigationButtonStyle}"
                                         Tapped="AboutUs"/>
-                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </SplitView.Pane>
@@ -57,7 +52,7 @@
         </Grid>
         <Button Content="Play"
                 Tapped="Play"
-                Style="{StaticResource DefaultButtonStyle}"
+                Style="{StaticResource NavigationButtonPlayStyle}"
                 HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>

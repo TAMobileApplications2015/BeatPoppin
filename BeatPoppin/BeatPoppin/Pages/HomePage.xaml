@@ -14,7 +14,8 @@
                     <VisualState.Setters>
                         <Setter Target="ProgressRing.IsActive" Value="False" />
                         <Setter Target="LocalHighScoreContainer.Opacity" Value="1.0" />
-                        <Setter Target="PageMainContainer.Opacity" Value="1.0" />
+                        <Setter Target="RemoteHighScoreContainer.Opacity" Value="1.0" />
+                        <Setter Target="MusicPlayerContainer.Opacity" Value="1.0" />
                     </VisualState.Setters>
                 </VisualState>
 
@@ -41,15 +42,30 @@
                             </DoubleAnimationUsingKeyFrames>
 
                             <!-- Then, zoom & fade in the Main Content of the Page (PageMainContainer) -->
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageMainContainer"
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="RemoteHighScoreContainer"
                                                            Storyboard.TargetProperty="Opacity"
                                                            BeginTime="0:0:0.2">
                                 <SplineDoubleKeyFrame KeySpline="0.2, 0.6, 0.3, 0.9" KeyTime="0:0:0.6"
                                                       Value="1.0" />
                             </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageMainContainerTransform"
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="RemoteHighScoreContainerTransform"
                                                        Storyboard.TargetProperty="TranslateZ"
                                                        BeginTime="0:0:0.2">
+                                <DiscreteDoubleKeyFrame KeyTime="0" Value="-300.0" />
+                                <SplineDoubleKeyFrame KeySpline="0.1, 0.9, 0.2, 1" KeyTime="0:0:0.5"
+                                                      Value="0.0" />
+                            </DoubleAnimationUsingKeyFrames>
+
+                            <!-- Then, zoom & fade in the music player -->
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="MusicPlayerContainer"
+                                                           Storyboard.TargetProperty="Opacity" 
+                                                           BeginTime="0:0:0.2">
+                                <SplineDoubleKeyFrame KeySpline="0.2, 0.6, 0.3, 0.9" KeyTime="0:0:0.5"
+                                                      Value="1.0" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="MusicPlayerContainerTransform"
+                                                           Storyboard.TargetProperty="TranslateZ"
+                                                           BeginTime="0:0:0.2">
                                 <DiscreteDoubleKeyFrame KeyTime="0" Value="-300.0" />
                                 <SplineDoubleKeyFrame KeySpline="0.1, 0.9, 0.2, 1" KeyTime="0:0:0.5"
                                                       Value="0.0" />
@@ -65,14 +81,14 @@
         </Grid.Transform3D>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="75"/>
                 <RowDefinition Height="1*"/>
+                <RowDefinition Height=".5*"/>
             </Grid.RowDefinitions>
             <Grid x:Name="LocalHighScoreContainer"
-            HorizontalAlignment="Center"
                   VerticalAlignment="Top"
                   Grid.Row="0"
-              Opacity="0.0">
+                  Opacity="0.0">
                 <Grid.Transform3D>
                     <CompositeTransform3D x:Name="LocalHighScoreContainerTransform" />
                 </Grid.Transform3D>
@@ -81,117 +97,118 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Your Highscore"
-                       FontSize="36"
-                       Grid.Row="0"/>
+                           HorizontalAlignment="Center"
+                           FontSize="28"
+                           Grid.Row="0"/>
                 <TextBlock Text="{Binding LocalPlayerCurrentHighscore}" 
-                       Grid.Row="1"
-                       FontSize="28"
-                       TextAlignment="Center"/>
+                           Grid.Row="1"
+                           FontSize="24"
+                           TextAlignment="Center"/>
             </Grid>
-            <Grid x:Name="PageMainContainer"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Center"
-              Grid.Row="1"
-              Opacity="0.0">
+            <Grid x:Name="RemoteHighScoreContainer"
+                  Grid.Row="1"
+                  Opacity="0.0">
                 <Grid.Transform3D>
-                    <CompositeTransform3D x:Name="PageMainContainerTransform" />
+                    <CompositeTransform3D x:Name="RemoteHighScoreContainerTransform" />
                 </Grid.Transform3D>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0"
-                      Style="{StaticResource DefaultHomeContainerStyle}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="Play Your Music"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".12*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Current Highscore"
                                TextAlignment="Center"
-                               FontSize="30"
+                               FontSize="26"
                                Grid.Row="0"/>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        <AppBarButton Icon="Find"
-                                      Grid.Column="0"
-                                      Grid.Row="0"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Command="{Binding ChooseMusic}"/>
-                        <AppBarButton Icon="Play"
-                                      Grid.Column="1"
-                                      Grid.Row="0"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Command="{Binding PlayMusic}"/>
-                        <AppBarButton Icon="Stop"
-                                      Grid.Column="2"
-                                      Grid.Row="0"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Command="{Binding StopMusic}"/>
-                        <TextBlock Name="tbSongs"
-                                   Grid.Row="1"
-                                   Grid.ColumnSpan="3"
-                                   TextAlignment="Center"
-                           Text="{Binding MusicPlayList, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                    </Grid>
-                </Grid>
-                <Grid Grid.Column="1"
-                      Style="{StaticResource DefaultHomeContainerStyle}">
+                <Grid Grid.Row="1"
+                  Style="{StaticResource DefaultHomeContainerStyle}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height=".9*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Current Highscore"
-                               TextAlignment="Center"
-                               FontSize="30"
+                    <TextBlock Text="ImageHere"
                                Grid.Row="0"/>
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
+                            <RowDefinition Height=".9*"/>
                             <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height=".9*"/>
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="ImageHere"
-                               Grid.Column="1"
-                               Grid.RowSpan="4"/>
                         <TextBlock Text="Name"
-                                   FontSize="28"
+                                   FontSize="22"
                                    Grid.Row="0"
                                    Grid.Column="0"
                                    TextAlignment="Center"/>
                         <TextBox Text="{Binding RemoteHighScoreUserName}"
                                  Grid.Row="1"
-                                 FontSize="22"
+                                 FontSize="18"
                                  Grid.Column="0"
                                  IsEnabled="False"
-                                 TextAlignment="Center"/>
+                                 TextAlignment="Center"
+                                 VerticalContentAlignment="Center"/>
                         <TextBlock Text="Scored"
-                                   FontSize="28"
+                                   FontSize="22"
                                    Grid.Row="2"
                                    Grid.Column="0"
                                    TextAlignment="Center"/>
                         <TextBox Text="{Binding RemoteHighScoreValue}"
                                  Grid.Row="3"
-                                 FontSize="22"
+                                 FontSize="18"
                                  Grid.Column="0"
                                  IsEnabled="False"
-                                 TextAlignment="Center"/>
+                                 TextAlignment="Center"
+                                 VerticalContentAlignment="Center"/>
                     </Grid>
+                </Grid>
+            </Grid>
+            <Grid x:Name="MusicPlayerContainer"
+                      Grid.Row="2"
+                      Opacity="0.0">
+                <Grid.Transform3D>
+                    <CompositeTransform3D x:Name="MusicPlayerContainerTransform" />
+                </Grid.Transform3D>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".4*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Play Your Music"
+                               TextAlignment="Center"
+                               FontSize="26"
+                               Grid.Row="0"/>
+                <Grid Grid.Row="1"
+                      Style="{StaticResource DefaultHomeContainerStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <AppBarButton Icon="Find"
+                                      Grid.Column="0"
+                                      Grid.Row="0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Command="{Binding ChooseMusic}"/>
+                    <AppBarButton Icon="Play"
+                                      Grid.Column="1"
+                                      Grid.Row="0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Command="{Binding PlayMusic}"/>
+                    <AppBarButton Icon="Stop"
+                                      Grid.Column="2"
+                                      Grid.Row="0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Command="{Binding StopMusic}"/>
+                    <TextBlock Name="tbSongs"
+                                   Grid.Row="1"
+                                   Grid.ColumnSpan="3"
+                                   TextAlignment="Center"
+                           Text="{Binding MusicPlayList, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </Grid>
         </Grid>
