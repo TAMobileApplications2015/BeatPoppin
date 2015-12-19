@@ -10,8 +10,6 @@
     [ParseClassName("User")]
     public class User : ParseObject
     {
-        private List<HighScore> highScores;
-
         [ParseFieldName("displayName")]
         public string DisplayName
         {

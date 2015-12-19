@@ -21,7 +21,7 @@
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected void ToastMessage(string title, string content)
+        public void ToastMessage(string title, string content)
         {
             //    string title = "Andrew sent you a picture";
             //    string content = "Check this out, Happy Canyon in Utah!";

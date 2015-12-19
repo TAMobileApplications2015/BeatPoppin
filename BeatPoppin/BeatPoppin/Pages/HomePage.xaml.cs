@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -23,10 +25,17 @@ namespace BeatPoppin.Pages
     /// </summary>
     public sealed partial class HomePage : Page
     {
+        private UISettings uiSettings;
+
         public HomePage()
         {
             this.InitializeComponent();
+            
+            VisualStateManager.GoToState(this, "ContentNotLoadedState", false);
+
             this.ViewModel = new HomeViewModel();
+
+            uiSettings = new UISettings();
         }
 
         public HomeViewModel ViewModel
@@ -43,7 +52,20 @@ namespace BeatPoppin.Pages
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.ViewModel.RefreshLocalScoreAsync();
+            base.OnNavigatedTo(e);
+            this.PrepareScreen();
+        }
+
+        private async Task RefreshData()
+        {
+            await this.ViewModel.RefreshLocalScoreAsync();
+            await this.ViewModel.RefreshRemotScoreAsync();
+        }
+
+        private async void PrepareScreen()
+        {
+            await this.RefreshData();
+            VisualStateManager.GoToState(this, "ContentLoadedState", uiSettings.AnimationsEnabled);
         }
     }
 }

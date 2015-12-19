@@ -10,29 +10,30 @@
     using Data;
     using BeatPoppin.Commands;
     using BeatPoppin.Pages;
-
+    using System.Threading.Tasks;
     public class HomeViewModel : BaseViewModel
     {
         private LocalData localData;
         private RemoteData remoteData;
-        private long? localPlayerCurrentHighscore;
-        private List<StorageFile> playList;
+        private long localPlayerCurrentHighscore;
+
+        private List<StorageFile> playlist;
         private string musicPlayList;
         private ICommand chooseMusicCommand;
         private ICommand playMusicCommand;
         private ICommand stopMusicCommand;
         private MediaElement musicPlayer;
+        private string remoteHighScoreUserName;
+        private string remoteHighScoreValue;
 
         public HomeViewModel()
         {
             this.localData = new LocalData(new LocalDb());
             this.remoteData = new RemoteData();
-            this.playList = new List<StorageFile>();
-
-            this.RefreshLocalScoreAsync();
+            this.playlist = new List<StorageFile>();
         }
 
-        public long? LocalPlayerCurrentHighscore
+        public long LocalPlayerCurrentHighscore
         {
             get
             {
@@ -42,6 +43,32 @@
             {
                 this.localPlayerCurrentHighscore = value;
                 this.OnPropertyChanged("LocalPlayerCurrentHighscore");
+            }
+        }
+
+        public string RemoteHighScoreValue
+        {
+            get
+            {
+                return this.remoteHighScoreValue;
+            }
+            set
+            {
+                this.remoteHighScoreValue = value;
+                this.OnPropertyChanged("RemoteHighScoreValue");
+            }
+        }
+
+        public string RemoteHighScoreUserName
+        {
+            get
+            {
+                return this.remoteHighScoreUserName;
+            }
+            set
+            {
+                this.remoteHighScoreUserName = value;
+                this.OnPropertyChanged("RemoteHighScoreUserName");
             }
         }
 
@@ -98,31 +125,35 @@
             {
                 return this.musicPlayList;
             }
-            private set
+            set
             {
                 this.musicPlayList = value;
                 this.OnPropertyChanged("MusicPlayList");
             }
         }
-
+        
         private async void ExecChooseMusic()
         {
             var openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.List;
             openPicker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
             openPicker.FileTypeFilter.Add(".mp3");
-            var result = new StringBuilder();
+            openPicker.FileTypeFilter.Add(".wav");
+            openPicker.FileTypeFilter.Add(".wma");
+            openPicker.FileTypeFilter.Add(".m4a");
+
+            var fileNames = new StringBuilder();
 
             var files = await openPicker.PickMultipleFilesAsync();
             if (files != null)
             {
                 foreach (var file in files)
                 {
-                    this.playList.Add(file);
-                    result.AppendLine(file.Name);
+                    this.playlist.Add(file);
+                    fileNames.AppendLine(file.Name);
                 }
 
-                this.MusicPlayList = result.ToString();
+                this.MusicPlayList = fileNames.ToString();
             }
             else
             {
@@ -132,10 +163,10 @@
 
         private async void ExecPlayMusic()
         {
-            if (this.playList.Count > 0)
+            if (this.playlist.Count > 0)
             {
                 // TODO Grant access
-                var storageFile = await StorageFile.GetFileFromPathAsync(this.playList[0].Path);
+                var storageFile = await StorageFile.GetFileFromPathAsync(this.playlist[0].Path);
                 var stream = await storageFile.OpenAsync(FileAccessMode.Read);
                 if (this.musicPlayer == null)
                 {
@@ -147,16 +178,18 @@
             }
         }
 
-        public async void RefreshLocalScoreAsync()
+        public async Task RefreshLocalScoreAsync()
         {
             var localHighScore = await this.localData.GetCurrentHighScoreAsync();
             this.LocalPlayerCurrentHighscore = localHighScore.Value;
         }
 
-        public async void RefreshRemotScoreAsync()
+        public async Task RefreshRemotScoreAsync()
         {
             var remoteHighScore = await this.remoteData.GetCurrentHighScoreAsync();
-            var remoteUserHighScore = await this.remoteData.GetUserForScoreAsync(remoteHighScore);
+            this.RemoteHighScoreValue = remoteHighScore.Value.ToString();
+            var remoteUserScored = await this.remoteData.GetUserForScoreAsync(remoteHighScore);
+            this.RemoteHighScoreUserName = remoteUserScored.Get<string>("displayName");
         }
     }
 }

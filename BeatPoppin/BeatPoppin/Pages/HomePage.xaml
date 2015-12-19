@@ -7,66 +7,200 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Center"
-                  VerticalAlignment="Top"
-                  Grid.Row="0">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ContentStates">
+                <VisualState x:Name="ContentNotLoadedState" />
+                <VisualState x:Name="ContentLoadedState">
+                    <VisualState.Setters>
+                        <Setter Target="ProgressRing.IsActive" Value="False" />
+                        <Setter Target="LocalHighScoreContainer.Opacity" Value="1.0" />
+                        <Setter Target="PageMainContainer.Opacity" Value="1.0" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualStateGroup.Transitions>
+                    <VisualTransition From="ContentNotLoadedState" To="ContentLoadedState">
+                        <Storyboard>
+                            <!-- Disable ProgressRing -->
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ProgressRing"
+                                                           Storyboard.TargetProperty="IsActive">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="False" />
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <!-- Zoom & fade in the first block LocalHighScoreContent -->
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LocalHighScoreContainer"
+                                                           Storyboard.TargetProperty="Opacity">
+                                <SplineDoubleKeyFrame KeySpline="0.2, 0.6, 0.3, 0.9" KeyTime="0:0:0.5"
+                                                      Value="1.0" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LocalHighScoreContainerTransform"
+                                                           Storyboard.TargetProperty="TranslateZ">
+                                <DiscreteDoubleKeyFrame KeyTime="0" Value="-300.0" />
+                                <SplineDoubleKeyFrame KeySpline="0.1, 0.9, 0.2, 1" KeyTime="0:0:0.5"
+                                                      Value="0.0" />
+                            </DoubleAnimationUsingKeyFrames>
+
+                            <!-- Then, zoom & fade in the Main Content of the Page (PageMainContainer) -->
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageMainContainer"
+                                                           Storyboard.TargetProperty="Opacity"
+                                                           BeginTime="0:0:0.2">
+                                <SplineDoubleKeyFrame KeySpline="0.2, 0.6, 0.3, 0.9" KeyTime="0:0:0.6"
+                                                      Value="1.0" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageMainContainerTransform"
+                                                       Storyboard.TargetProperty="TranslateZ"
+                                                       BeginTime="0:0:0.2">
+                                <DiscreteDoubleKeyFrame KeyTime="0" Value="-300.0" />
+                                <SplineDoubleKeyFrame KeySpline="0.1, 0.9, 0.2, 1" KeyTime="0:0:0.5"
+                                                      Value="0.0" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualTransition>
+                </VisualStateGroup.Transitions>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Grid.Transform3D>
+            <PerspectiveTransform3D />
+        </Grid.Transform3D>
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Your Highscore"
+            <Grid x:Name="LocalHighScoreContainer"
+            HorizontalAlignment="Center"
+                  VerticalAlignment="Top"
+                  Grid.Row="0"
+              Opacity="0.0">
+                <Grid.Transform3D>
+                    <CompositeTransform3D x:Name="LocalHighScoreContainerTransform" />
+                </Grid.Transform3D>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Your Highscore"
                        FontSize="36"
                        Grid.Row="0"/>
-            <TextBlock Text="{Binding LocalPlayerCurrentHighscore}" 
+                <TextBlock Text="{Binding LocalPlayerCurrentHighscore}" 
                        Grid.Row="1"
                        FontSize="28"
                        TextAlignment="Center"/>
-        </Grid>
-        <Grid HorizontalAlignment="Center"
+            </Grid>
+            <Grid x:Name="PageMainContainer"
+              HorizontalAlignment="Center"
               VerticalAlignment="Center"
-              Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0"
-                            Style="{StaticResource DefaultHomeContainerStyle}">
-                <TextBlock Text="Play Your Music"
-                           TextAlignment="Center"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <AppBarButton Icon="Find"
-                                  Grid.Column="0"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  Command="{Binding ChooseMusic}"/>
-                    <AppBarButton Icon="Play"
-                                  Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  Command="{Binding PlayMusic}"/>
-                    <AppBarButton Icon="Stop"
-                                  Grid.Column="2"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  Command="{Binding StopMusic}"/>
+              Grid.Row="1"
+              Opacity="0.0">
+                <Grid.Transform3D>
+                    <CompositeTransform3D x:Name="PageMainContainerTransform" />
+                </Grid.Transform3D>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0"
+                      Style="{StaticResource DefaultHomeContainerStyle}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Play Your Music"
+                               TextAlignment="Center"
+                               FontSize="30"
+                               Grid.Row="0"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <AppBarButton Icon="Find"
+                                      Grid.Column="0"
+                                      Grid.Row="0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Command="{Binding ChooseMusic}"/>
+                        <AppBarButton Icon="Play"
+                                      Grid.Column="1"
+                                      Grid.Row="0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Command="{Binding PlayMusic}"/>
+                        <AppBarButton Icon="Stop"
+                                      Grid.Column="2"
+                                      Grid.Row="0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Command="{Binding StopMusic}"/>
+                        <TextBlock Name="tbSongs"
+                                   Grid.Row="1"
+                                   Grid.ColumnSpan="3"
+                                   TextAlignment="Center"
+                           Text="{Binding MusicPlayList, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
                 </Grid>
-                <TextBlock Name="tbSongs"
-                           Text="{Binding MusicPlayList}"/>
-            </StackPanel>
-            <StackPanel Grid.Column="1"
-                        Style="{StaticResource DefaultHomeContainerStyle}">
-                <TextBlock Text="Current Highscore"
-                           TextAlignment="Center"/>
-            </StackPanel>
+                <Grid Grid.Column="1"
+                      Style="{StaticResource DefaultHomeContainerStyle}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Current Highscore"
+                               TextAlignment="Center"
+                               FontSize="30"
+                               Grid.Row="0"/>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{Binding RemoteHighScoreUserImageSource}"
+                               Grid.Column="1"
+                               Grid.RowSpan="4"/>
+                        <TextBlock Text="Name"
+                                   FontSize="28"
+                                   Grid.Row="0"
+                                   Grid.Column="0"
+                                   TextAlignment="Center"/>
+                        <TextBox Text="{Binding RemoteHighScoreUserName}"
+                                 Grid.Row="1"
+                                 FontSize="22"
+                                 Grid.Column="0"
+                                 IsEnabled="False"
+                                 TextAlignment="Center"/>
+                        <TextBlock Text="Scored"
+                                   FontSize="28"
+                                   Grid.Row="2"
+                                   Grid.Column="0"
+                                   TextAlignment="Center"/>
+                        <TextBox Text="{Binding RemoteHighScoreValue}"
+                                 Grid.Row="3"
+                                 FontSize="22"
+                                 Grid.Column="0"
+                                 IsEnabled="False"
+                                 TextAlignment="Center"/>
+                    </Grid>
+                </Grid>
+            </Grid>
         </Grid>
+        <ProgressRing x:Name="ProgressRing" 
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center" 
+                      IsHitTestVisible="False" 
+                      Width="75" 
+                      Height="75" 
+                      IsActive="True"/>
     </Grid>
 </Page>
