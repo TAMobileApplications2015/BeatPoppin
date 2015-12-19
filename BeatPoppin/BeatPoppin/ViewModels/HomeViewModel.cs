@@ -3,14 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using System.Threading.Tasks;
     using System.Windows.Input;
     using Windows.Storage;
     using Windows.Storage.Pickers;
     using Windows.UI.Xaml.Controls;
     using Data;
     using BeatPoppin.Commands;
-    using BeatPoppin.Pages;
-    using System.Threading.Tasks;
+
     public class HomeViewModel : BaseViewModel
     {
         private LocalData localData;
@@ -72,6 +72,19 @@
             }
         }
 
+        public string MusicPlayList
+        {
+            get
+            {
+                return this.musicPlayList;
+            }
+            set
+            {
+                this.musicPlayList = value;
+                this.OnPropertyChanged("MusicPlayList");
+            }
+        }
+
         public ICommand ChooseMusic
         {
             get
@@ -119,19 +132,6 @@
             }
         }
 
-        public string MusicPlayList
-        {
-            get
-            {
-                return this.musicPlayList;
-            }
-            set
-            {
-                this.musicPlayList = value;
-                this.OnPropertyChanged("MusicPlayList");
-            }
-        }
-        
         private async void ExecChooseMusic()
         {
             var openPicker = new FileOpenPicker();

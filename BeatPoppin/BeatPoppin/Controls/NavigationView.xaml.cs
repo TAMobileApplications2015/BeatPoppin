@@ -12,6 +12,7 @@
     {
         private const string ShowMoreButtonHideIconPath = "ms-appx:///Icons/appbar.navigate.previous.png";
         private const string ShowMoreButtonShowIconPath = "ms-appx:///Icons/appbar.navigate.next.png";
+        private Button lastClickedButton = null;
 
         public NavigationView()
         {
@@ -41,22 +42,37 @@
 
         private void Play(object sender, TappedRoutedEventArgs e)
         {
+            this.ToggleNavigationButton(sender);
             (Window.Current.Content as AppShell).Frame.Navigate(typeof(GamePage));
         }
 
         private void AboutUs(object sender, TappedRoutedEventArgs e)
         {
+            this.ToggleNavigationButton(sender);
             (Window.Current.Content as AppShell).Frame.Navigate(typeof(AboutUsPage));
         }
 
         private void Home(object sender, TappedRoutedEventArgs e)
         {
+            this.ToggleNavigationButton(sender);
             (Window.Current.Content as AppShell).Frame.Navigate(typeof(HomePage));
         }
 
         private void Help(object sender, TappedRoutedEventArgs e)
         {
+            this.ToggleNavigationButton(sender);
             (Window.Current.Content as AppShell).Frame.Navigate(typeof(HelpPage));
+        }
+
+        private void ToggleNavigationButton(object sender)
+        {
+            if (this.lastClickedButton != null)
+            {
+                this.lastClickedButton.IsEnabled = true;
+            }
+
+            this.lastClickedButton = sender as Button;
+            this.lastClickedButton.IsEnabled = false;
         }
     }
 }
