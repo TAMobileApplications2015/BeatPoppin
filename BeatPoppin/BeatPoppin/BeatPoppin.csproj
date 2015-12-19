@@ -129,6 +129,7 @@
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToastMessageIconsEnum.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\HelpPageViewModel.cs" />
@@ -144,6 +145,8 @@
   <ItemGroup>
     <Content Include="Icons\appbar.navigate.next.png" />
     <Content Include="Icons\appbar.navigate.previous.png" />
+    <Content Include="Icons\appbar.smiley.frown.png" />
+    <Content Include="Icons\appbar.smiley.happy.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

@@ -64,7 +64,15 @@ namespace BeatPoppin.Pages
 
         private async void PrepareScreen()
         {
-            await this.RefreshData();
+            try
+            {
+                await this.RefreshData();
+            }
+            catch (System.Net.WebException)
+            {
+                this.ViewModel.ToastMessage("No Connection with the server!", "Please try again later.", ToastMessageIconsEnum.Frown);
+            }
+
             VisualStateManager.GoToState(this, "ContentLoadedState", uiSettings.AnimationsEnabled);
         }
     }

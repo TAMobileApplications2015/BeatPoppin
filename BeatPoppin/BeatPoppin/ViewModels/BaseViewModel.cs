@@ -10,6 +10,11 @@
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private const int ToastedMessageExpirationTimeInSeconds = 5;
+        private readonly string[] ToastMessageIconPaths = new string[]
+        {
+            "ms-appx:///Icons/appbar.smiley.frown.png",
+            "ms-appx:///Icons/appbar.smiley.happy.png"
+        };
 
         protected void OnPropertyChanged(string propertyName)
         {
@@ -21,12 +26,12 @@
             this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void ToastMessage(string title, string content)
+        public void ToastMessage(string title, string content, ToastMessageIconsEnum icon)
         {
             //    string title = "Andrew sent you a picture";
             //    string content = "Check this out, Happy Canyon in Utah!";
-            string image = "http://blogs.msdn.com/cfs-filesystemfile.ashx/__key/communityserver-blogs-components-weblogfiles/00-00-01-71-81-permanent/2727.happycanyon1_5B00_1_5D00_.jpg";
-            string logo = "ms-appdata:///local/Andrew.jpg";
+            //string image = "http://blogs.msdn.com/cfs-filesystemfile.ashx/__key/communityserver-blogs-components-weblogfiles/00-00-01-71-81-permanent/2727.happycanyon1_5B00_1_5D00_.jpg";
+            string logo = this.ToastMessageIconPaths[(int)icon];
 
             // Construct the visuals of the toast
             ToastVisual visual = new ToastVisual()
@@ -41,13 +46,13 @@
                     Text = content
                 },
 
-                InlineImages =
-                {
-                    new ToastImage()
-                    {
-                        Source = new ToastImageSource(image)
-                    }
-                },
+                //InlineImages =
+                //{
+                //    new ToastImage()
+                //    {
+                //        Source = new ToastImageSource(image)
+                //    }
+                //},
 
                 AppLogoOverride = new ToastAppLogo()
                 {
