@@ -27,11 +27,13 @@
                         <Button Tag="{Binding ElementName=svShowMore}"
                                 Tapped="ShowMore"
                                 HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
                                 Width="35"
-                                Height="35"
-                                Grid.Column="0">
+                                Height="50"
+                                Grid.Column="0"
+                                BorderThickness="0">
                             <Button.Background>
-                                <ImageBrush ImageSource="../Icons/appbar.navigate.next.png" />
+                                <ImageBrush ImageSource="../Icons/appbar.navigate.next.png"/>
                             </Button.Background>
                         </Button>
                         <StackPanel Orientation="Horizontal"

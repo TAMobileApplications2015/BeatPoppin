@@ -59,13 +59,13 @@
                             <!-- Then, zoom & fade in the music player -->
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="MusicPlayerContainer"
                                                            Storyboard.TargetProperty="Opacity" 
-                                                           BeginTime="0:0:0.2">
+                                                           BeginTime="0:0:0.3">
                                 <SplineDoubleKeyFrame KeySpline="0.2, 0.6, 0.3, 0.9" KeyTime="0:0:0.5"
                                                       Value="1.0" />
                             </DoubleAnimationUsingKeyFrames>
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="MusicPlayerContainerTransform"
                                                            Storyboard.TargetProperty="TranslateZ"
-                                                           BeginTime="0:0:0.2">
+                                                           BeginTime="0:0:0.3">
                                 <DiscreteDoubleKeyFrame KeyTime="0" Value="-300.0" />
                                 <SplineDoubleKeyFrame KeySpline="0.1, 0.9, 0.2, 1" KeyTime="0:0:0.5"
                                                       Value="0.0" />
