@@ -162,8 +162,8 @@
                 </Grid>
             </Grid>
             <Grid x:Name="MusicPlayerContainer"
-                      Grid.Row="2"
-                      Opacity="0.0">
+                  Grid.Row="2"
+                  Opacity="0.0">
                 <Grid.Transform3D>
                     <CompositeTransform3D x:Name="MusicPlayerContainerTransform" />
                 </Grid.Transform3D>
@@ -172,9 +172,9 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Play Your Music"
-                               TextAlignment="Center"
-                               FontSize="26"
-                               Grid.Row="0"/>
+                           TextAlignment="Center"
+                           FontSize="26"
+                           Grid.Row="0"/>
                 <Grid Grid.Row="1"
                       Style="{StaticResource DefaultHomeContainerStyle}">
                     <Grid.ColumnDefinitions>
@@ -187,28 +187,31 @@
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
                     <AppBarButton Icon="Find"
-                                      Grid.Column="0"
-                                      Grid.Row="0"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Command="{Binding ChooseMusic}"/>
+                                  Grid.Column="0"
+                                  Grid.Row="0"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Command="{Binding ChooseMusic}"/>
                     <AppBarButton Icon="Play"
-                                      Grid.Column="1"
-                                      Grid.Row="0"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Command="{Binding PlayMusic}"/>
+                                  Grid.Column="1"
+                                  Grid.Row="0"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Command="{Binding PlayMusic}"/>
                     <AppBarButton Icon="Stop"
-                                      Grid.Column="2"
-                                      Grid.Row="0"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Command="{Binding StopMusic}"/>
-                    <TextBlock Name="tbSongs"
-                                   Grid.Row="1"
-                                   Grid.ColumnSpan="3"
+                                  Grid.Column="2"
+                                  Grid.Row="0"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Command="{Binding StopMusic}"/>
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto"
+                                  Grid.Row="1"
+                                  Grid.ColumnSpan="3">
+                        <TextBlock Name="tbSongs"
                                    TextAlignment="Center"
-                           Text="{Binding MusicPlayList, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                   Text="{Binding MusicPlayList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        </TextBlock>
+                    </ScrollViewer>
                 </Grid>
             </Grid>
         </Grid>
