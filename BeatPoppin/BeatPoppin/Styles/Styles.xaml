@@ -50,7 +50,9 @@
                     Value="2"/>
         <Setter Property="Margin"
                     Value="5"/>
-        <Setter Property="Width"
+        <Setter Property="MinWidth"
                 Value="400"/>
+        <Setter Property="MaxWidth"
+                Value="800"/>
     </Style>
 </ResourceDictionary>
