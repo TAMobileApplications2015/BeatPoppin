@@ -104,6 +104,17 @@
                            Grid.Row="1"
                            FontSize="24"
                            TextAlignment="Center"/>
+                <Button Tapped="RefreshPage"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        Width="75"
+                        Height="75"
+                        Grid.RowSpan="2"
+                        BorderThickness="0">
+                    <Button.Background>
+                        <ImageBrush ImageSource="../Icons/appbar.refresh.png"/>
+                    </Button.Background>
+                </Button>
             </Grid>
             <Grid x:Name="RemoteHighScoreContainer"
                   Grid.Row="1"

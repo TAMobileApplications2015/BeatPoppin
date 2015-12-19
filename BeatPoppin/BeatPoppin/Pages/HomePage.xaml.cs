@@ -1,10 +1,12 @@
-﻿using BeatPoppin.ViewModels;
+﻿using BeatPoppin.Commands;
+using BeatPoppin.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.ViewManagement;
@@ -31,8 +33,6 @@ namespace BeatPoppin.Pages
         {
             this.InitializeComponent();
             
-            VisualStateManager.GoToState(this, "ContentNotLoadedState", false);
-
             this.ViewModel = new HomeViewModel();
 
             uiSettings = new UISettings();
@@ -64,6 +64,8 @@ namespace BeatPoppin.Pages
 
         private async void PrepareScreen()
         {
+            VisualStateManager.GoToState(this, "ContentNotLoadedState", false);
+
             try
             {
                 await this.RefreshData();
@@ -74,6 +76,11 @@ namespace BeatPoppin.Pages
             }
 
             VisualStateManager.GoToState(this, "ContentLoadedState", uiSettings.AnimationsEnabled);
+        }
+
+        private void RefreshPage(object sender, TappedRoutedEventArgs e)
+        {
+            this.PrepareScreen();
         }
     }
 }
