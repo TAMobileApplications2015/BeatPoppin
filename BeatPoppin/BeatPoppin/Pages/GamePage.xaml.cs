@@ -29,17 +29,7 @@ namespace BeatPoppin.Pages
             this.InitializeComponent();
             this.ViewModel = new GameViewModel();
             this.LoadPreviewAsBackground();
-        }
-
-        private async void LoadPreviewAsBackground()
-        {
-            // Using Windows.Media.Capture.MediaCapture APIs to stream from webcam
-            MediaCapture mediaCaptureMgr = new MediaCapture();
-            await mediaCaptureMgr.InitializeAsync();
-
-            // Start capture preview.                
-            myCaptureElement.Source = mediaCaptureMgr;
-            await mediaCaptureMgr.StartPreviewAsync();
+            this.StartGame();
         }
 
         public GameViewModel ViewModel
@@ -54,6 +44,35 @@ namespace BeatPoppin.Pages
             }
         }
 
+        public ItemsControl Shapes
+        {
+            get
+            {
+                return this.icShapes as ItemsControl;
+            }
+            set
+            {
+                this.icShapes = value;
+            }
+        }
+
+        private async void StartGame()
+        {
+
+        }
+
+        private async void LoadPreviewAsBackground()
+        {
+            // Using Windows.Media.Capture.MediaCapture APIs to stream from webcam
+            MediaCapture mediaCaptureMgr = new MediaCapture();
+            await mediaCaptureMgr.InitializeAsync();
+
+            // Start capture preview.                
+            this.myCaptureElement.Source = mediaCaptureMgr;
+
+            await mediaCaptureMgr.StartPreviewAsync();
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
 
@@ -63,5 +82,74 @@ namespace BeatPoppin.Pages
         {
 
         }
+
+        // CIRCLE PINCH ANIMATION
+        #region CircleAnimation
+        private void CircleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
+        {
+
+        }
+
+        private void CircleManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+
+        }
+
+        private void CircleManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+
+        }
+
+        private void CircleManipulationInertiaStarting(object sender, ManipulationInertiaStartingRoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
+        // RECT ROTATE ANIMATION
+        #region RectangleAnimation
+        private void RectangleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
+        {
+
+        }
+
+        private void RectangleManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+
+        }
+
+        private void RectangleManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+
+        }
+
+        private void RectangleManipulationInertiaStarting(object sender, ManipulationInertiaStartingRoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
+        // TRIANGLE SWIPE ANIMATION
+        #region TriangleAnimation
+        private void TriangleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
+        {
+
+        }
+
+        private void TriangleManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+
+        }
+
+        private void TriangleManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+
+        }
+
+        private void TriangleManipulationInertiaStarting(object sender, ManipulationInertiaStartingRoutedEventArgs e)
+        {
+
+        }
+        #endregion
     }
 }

@@ -6,24 +6,28 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
+    <Page.Resources>
+        <!--<attachedBehaviors:Animation x:Key="test" />-->
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <CaptureElement Name="myCaptureElement"
-                      Grid.Row="0"/>
-        <Canvas Background="Transparent"
-                Grid.Row="0"
-                Grid.Column="0">
-            <Rectangle Height="150"
-                       Width="150"
-                       Fill="Wheat"/>
-        </Canvas>
-        <TextBlock Text="{Binding testHighScore,
-            Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                   Grid.Row="1"
-                   FontSize="36"/>
+        <TextBlock Text="{Binding CurrentGameScore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                   FontSize="36"
+                   TextAlignment="Center"/>
+        <Grid Grid.Row="1">
+            <CaptureElement Name="myCaptureElement"
+                            Width="{Binding ElementName=Canvas, Path=Width}" 
+                            Height="{Binding ElementName=Canvas, Path=Height}"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Stretch="Fill"/>
+            <Canvas x:Name="Canvas" Background="Transparent">
+                <ItemsControl Name="icShapes"
+                      VerticalAlignment="Stretch"/>
+            </Canvas>
+        </Grid>
     </Grid>
 </Page>

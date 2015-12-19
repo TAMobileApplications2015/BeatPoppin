@@ -113,6 +113,8 @@
     <Compile Include="Data\RemoteData.cs" />
     <Compile Include="Data\RemoteDb.cs" />
     <Compile Include="Data\RemoteGenericRepository.cs" />
+    <Compile Include="Helpers\ObjectPool.cs" />
+    <Compile Include="Helpers\ShapeFactory.cs" />
     <Compile Include="Pages\AboutUsPage.xaml.cs">
       <DependentUpon>AboutUsPage.xaml</DependentUpon>
     </Compile>
@@ -131,10 +133,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ToastMessageIconsEnum.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\CircleViewModel.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\HelpPageViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\AppShellViewModel.cs" />
+    <Compile Include="ViewModels\RectangleViewModel.cs" />
+    <Compile Include="ViewModels\ShapeBaseViewModel.cs" />
+    <Compile Include="ViewModels\TriangleViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

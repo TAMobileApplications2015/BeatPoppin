@@ -110,7 +110,7 @@
                         Width="75"
                         Height="75"
                         Grid.RowSpan="2"
-                        BorderThickness="0">
+                        BorderThickness="1">
                     <Button.Background>
                         <ImageBrush ImageSource="../Icons/appbar.refresh.png"/>
                     </Button.Background>
