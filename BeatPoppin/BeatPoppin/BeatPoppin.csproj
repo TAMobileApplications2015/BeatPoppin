@@ -116,6 +116,7 @@
     <Compile Include="Data\RemoteDb.cs" />
     <Compile Include="Data\RemoteGenericRepository.cs" />
     <Compile Include="Helpers\ObjectPool.cs" />
+    <Compile Include="Helpers\Toast.cs" />
     <Compile Include="Pages\AboutUsPage.xaml.cs">
       <DependentUpon>AboutUsPage.xaml</DependentUpon>
     </Compile>

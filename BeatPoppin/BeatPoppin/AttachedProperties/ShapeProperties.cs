@@ -5,18 +5,18 @@
 
     public class ShapeProperties
     {
-        public static double GetExpirationTime(DependencyObject obj)
+        public static int GetScoreValue(DependencyObject obj)
         {
-            return (double)obj.GetValue(ExpirationTimeProperty);
+            return (int)obj.GetValue(ScoreValueProperty);
         }
 
-        public static void SetExpirationTime(DependencyObject obj, double value)
+        public static void SetScoreValue(DependencyObject obj, int value)
         {
-            obj.SetValue(ExpirationTimeProperty, value);
+            obj.SetValue(ScoreValueProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for ExpirationTime.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ExpirationTimeProperty =
-            DependencyProperty.RegisterAttached("ExpirationTime", typeof(double), typeof(Shape), new PropertyMetadata(3000));
+        // Using a DependencyProperty as the backing store for ScoreValue.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ScoreValueProperty =
+            DependencyProperty.RegisterAttached("ScoreValue", typeof(int), typeof(Shape), new PropertyMetadata(0));
     }
 }

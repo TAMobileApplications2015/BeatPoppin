@@ -1,4 +1,5 @@
 ﻿using BeatPoppin.Commands;
+using BeatPoppin.Helpers;
 using BeatPoppin.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace BeatPoppin.Pages
         public HomePage()
         {
             this.InitializeComponent();
-            
+
             this.ViewModel = new HomeViewModel();
 
             uiSettings = new UISettings();
@@ -56,31 +57,38 @@ namespace BeatPoppin.Pages
             this.PrepareScreen();
         }
 
-        private async Task RefreshData()
+        private void RefreshPage(object sender, TappedRoutedEventArgs e)
         {
-            await this.ViewModel.RefreshLocalScoreAsync();
-            await this.ViewModel.RefreshRemotScoreAsync();
+            this.PrepareScreen();
         }
 
         private async void PrepareScreen()
         {
             VisualStateManager.GoToState(this, "ContentNotLoadedState", false);
 
-            try
-            {
-                await this.RefreshData();
-            }
-            catch (System.Net.WebException)
-            {
-                this.ViewModel.ToastMessage("No Connection with the server!", "Please try again later.", ToastMessageIconsEnum.Frown);
-            }
+            await this.RefreshData();
 
             VisualStateManager.GoToState(this, "ContentLoadedState", uiSettings.AnimationsEnabled);
         }
 
-        private void RefreshPage(object sender, TappedRoutedEventArgs e)
+        private async Task RefreshData()
         {
-            this.PrepareScreen();
+            var localHighScore = await this.ViewModel.RefreshLocalScoreAsync();
+            long remoteHighScore = 0;
+            try
+            {
+                remoteHighScore = await this.ViewModel.RefreshRemoteScoreAsync();
+            }
+            catch (System.Net.WebException)
+            {
+                Toast.Message("No Connection with the server!", "Please try again later.", ToastMessageIconsEnum.Frown);
+            }
+
+            if (remoteHighScore > 0 && localHighScore > remoteHighScore)
+            {
+                await this.ViewModel.UpdateRemoteFromLocalScore();
+                Toast.Message("Yaayy!", "You have beaten the PREVIOUS CHAMP High Score! Now It's your turn to be beaten! Or Maybe NOT..", ToastMessageIconsEnum.Smile);
+            }
         }
     }
 }

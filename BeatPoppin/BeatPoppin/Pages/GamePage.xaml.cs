@@ -1,10 +1,12 @@
 ﻿using BeatPoppin.AttachedProperties;
+using BeatPoppin.Commands;
 using BeatPoppin.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Capture;
@@ -29,8 +31,11 @@ namespace BeatPoppin.Pages
     {
         private const double ShapeStartsToExpireAtMilliSeconds = 1000;
         private const int MaxShapesOnCanvas = 10;
+        private const string PlayerHighScoredMessage = "Yayy!! You are too good ;p";
+        private const string PlayerDidNotHighScoredMessage = "Sorry!! Not this time :(";
         private double currentGameStage = 3000;
         private Dictionary<Shape, double> shapesExpirationTime = new Dictionary<Shape, double>();
+        private Random random = new Random();
 
         public GamePage()
         {
@@ -68,12 +73,13 @@ namespace BeatPoppin.Pages
             {
                 if (this.GameOver)
                 {
+                    this.PrepareScoreScreen();
                     timer.Stop();
                 }
 
                 if (this.currentGameStage <= 0)
                 {
-                    this.currentGameStage = new Random().Next(500,2000);
+                    this.currentGameStage = this.random.Next(500,2000);
                 }
 
                 if (this.shapesExpirationTime.Count < MaxShapesOnCanvas)
@@ -82,13 +88,30 @@ namespace BeatPoppin.Pages
                     this.AddShapeToCanvas(newShape);
                 }
 
-                var randomExpirationTimeStep = new Random().Next(1, (int)Math.Ceiling((this.currentGameStage / 5)));
+                var randomExpirationTimeStep = this.random.Next(1, (int)Math.Ceiling((this.currentGameStage / 5)));
                 this.currentGameStage -= randomExpirationTimeStep;
                 this.UpdateShapes(randomExpirationTimeStep);
                 timer.Interval = TimeSpan.FromMilliseconds(this.currentGameStage);
             };
 
             timer.Start();
+        }
+
+        private async void PrepareScoreScreen()
+        {
+            this.StopPreviewAsBackground();
+            this.ScoreContainer.Visibility = Visibility.Visible;
+            this.GameContainer.Visibility = Visibility.Collapsed;
+            var playerHighScored = await this.ViewModel.PlayerHighScored();
+            if (playerHighScored)
+            {
+                this.GameScoreMessage.Text = PlayerHighScoredMessage;
+                this.ccHighScored.IsEnabled = true;
+            }
+            else
+            {
+                this.GameScoreMessage.Text = PlayerDidNotHighScoredMessage;
+            }
         }
 
         private void AddShapeToCanvas(ShapeBaseViewModel shape)
@@ -138,7 +161,8 @@ namespace BeatPoppin.Pages
             shapeToAdd.Fill = new SolidColorBrush(Colors.AliceBlue);
 
             shapesExpirationTime.Add(shapeToAdd, shape.ExpirationTime);
-            //ShapeProperties.SetExpirationTime(shapeToAdd, shape.ExpirationTime);
+            var randomLastScoreDigit = this.random.Next(0, 10);
+            ShapeProperties.SetScoreValue(shapeToAdd, shape.ScoreValue + randomLastScoreDigit);
 
             this.Canvas.Children.Add(shapeToAdd);
             Canvas.SetTop(shapeToAdd, shape.Top);
@@ -169,11 +193,19 @@ namespace BeatPoppin.Pages
 
         private void RemoveShape(Shape shape)
         {
+            var shapeValue = ShapeProperties.GetScoreValue(shape);
+            this.ViewModel.CurrentGameScore += shapeValue;
             var top = Canvas.GetTop(shape);
             var left = Canvas.GetLeft(shape);
             this.Canvas.Children.Remove(shape);
             this.ViewModel.RemoveShape(top, left);
             this.shapesExpirationTime.Remove(shape);
+        }
+
+        private async void StopPreviewAsBackground()
+        {
+            MediaCapture mediaCaptureMgr = new MediaCapture();
+            await mediaCaptureMgr.StopPreviewAsync();
         }
 
         private async void LoadPreviewAsBackground()

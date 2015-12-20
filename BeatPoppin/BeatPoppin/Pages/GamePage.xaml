@@ -10,23 +10,73 @@
         <!--<attachedBehaviors:Animation x:Key="test" />-->
     </Page.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>
-        <TextBlock Text="{Binding CurrentGameScore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   FontSize="36"
-                   TextAlignment="Center"/>
-        <Grid Grid.Row="1">
-            <CaptureElement Name="myCaptureElement"
+        <Grid x:Name="GameContainer">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="{Binding CurrentGameScore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       FontSize="36"
+                       TextAlignment="Center"/>
+            <Grid Grid.Row="1">
+                <CaptureElement Name="myCaptureElement"
                             Width="{Binding ElementName=Canvas, Path=Width}" 
                             Height="{Binding ElementName=Canvas, Path=Height}"
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
                             Stretch="Fill"/>
-            <Canvas x:Name="Canvas" Background="Transparent"
-                    Height="500"
-                    Width="500"/>
+                <Canvas x:Name="Canvas" Background="Transparent"
+                        Height="500"
+                        Width="500"/>
+            </Grid>
+        </Grid>
+        <Grid x:Name="ScoreContainer"
+                  Background="#99999900"
+                  Visibility="Collapsed">
+            <Grid VerticalAlignment="Center"
+                      HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".8*" />
+                    <RowDefinition Height=".8*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="GameScoreMessage" FontSize="36"
+                           TextAlignment="Center"
+                           VerticalAlignment="Bottom"
+                           Grid.Row="0"/>
+                <TextBlock Text="{Binding CurrentGameScore, Mode=TwoWay}" 
+                           FontSize="36"
+                           TextAlignment="Center"
+                           VerticalAlignment="Top"
+                           Grid.Row="1"/>
+                <ContentControl x:Name="ccHighScored"
+                                IsEnabled="False"
+                                VerticalAlignment="Center"
+                                Grid.Row="2">
+                    <Grid Style="{StaticResource DefaultHomeContainerStyle}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="HighScorePlayerName"
+                                 PlaceholderText="Enter your name, CHAMP!"
+                                 TextAlignment="Center"
+                                 Grid.Row="0"
+                                 HorizontalAlignment="Center"/>
+                        <Button Content="Take a Photo!" 
+                                Grid.Row="1"
+                                HorizontalAlignment="Center"
+                                Style="{StaticResource DefaultButtonStyle}"/>
+                        <Button Content="All done." 
+                                Grid.Row="2"
+                                CommandParameter="{Binding ElementName=HighScorePlayerName, Path=Text}"
+                                Command="{Binding SaveHighScore}"
+                                HorizontalAlignment="Center"
+                                Style="{StaticResource DefaultButtonStyle}"/>
+                    </Grid>
+                </ContentControl>
+            </Grid>
         </Grid>
     </Grid>
 </Page>

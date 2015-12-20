@@ -10,7 +10,7 @@
     using Windows.UI.Xaml.Controls;
     using Data;
     using BeatPoppin.Commands;
-
+    using Data.Models;
     public class HomeViewModel : BaseViewModel
     {
         private LocalData localData;
@@ -178,18 +178,40 @@
             }
         }
 
-        public async Task RefreshLocalScoreAsync()
+        public async Task<long> RefreshLocalScoreAsync()
         {
             var localHighScore = await this.localData.GetCurrentHighScoreAsync();
-            this.LocalPlayerCurrentHighscore = localHighScore.Value;
+            var score = this.LocalPlayerCurrentHighscore = localHighScore.Value;
+            return score;
         }
 
-        public async Task RefreshRemotScoreAsync()
+        public async Task<long> RefreshRemoteScoreAsync()
         {
             var remoteHighScore = await this.remoteData.GetCurrentHighScoreAsync();
             this.RemoteHighScoreValue = remoteHighScore.Value.ToString();
             var remoteUserScored = await this.remoteData.GetUserForScoreAsync(remoteHighScore);
             this.RemoteHighScoreUserName = remoteUserScored.Get<string>("displayName");
+
+            return remoteHighScore.Value;
+        }
+
+        public async Task UpdateRemoteFromLocalScore()
+        {
+            var localHighScore = await this.localData.GetCurrentHighScoreAsync();
+
+            var highScore = new HighScore()
+            {
+                Value = localHighScore.Value
+            };
+
+            var user = new User()
+            {
+                DisplayName = localHighScore.PlayerName
+            };
+
+            await this.remoteData.Highscores.AddAsync(highScore);
+            await this.remoteData.Users.AddAsync(user);
+            await this.remoteData.AddScoreToUserAsync(highScore, user);
         }
     }
 }

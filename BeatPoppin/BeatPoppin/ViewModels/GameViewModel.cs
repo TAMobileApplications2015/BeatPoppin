@@ -18,12 +18,13 @@
     {
         private LocalData localData;
         private RemoteData remoteData;
+        private ICommand saveHighScoreCommand;
 
         private const int InitialShapesCount = 10;
         private const int DefaultShapeSize = 100;
         private const int MinDefaultShapeExpirationTime = 1500;
         private const int MaxDefaultShapeExpirationTime = 3000;
-        private ulong currentGameScore;
+        private long currentGameScore;
         private ICollection<ShapeBaseViewModel> shapes;
         private ObjectPool<RectangleViewModel> rectPool;
         private ObjectPool<TriangleViewModel> trianglePool;
@@ -31,6 +32,7 @@
         private Random random;
         private double canvasHeight;
         private double canvasWidth;
+        private bool localHighScoreAlreadySaved;
 
         public GameViewModel()
         {
@@ -40,7 +42,39 @@
             this.InitGame();
         }
 
-        public ulong CurrentGameScore
+        public ICommand SaveHighScore
+        {
+            get
+            {
+                if (this.saveHighScoreCommand == null)
+                {
+                    this.saveHighScoreCommand = new RelayCommandWithParams(this.ExecSaveGameScore);
+                }
+
+                return this.saveHighScoreCommand;
+            }
+        }
+
+        private async void ExecSaveGameScore(object obj)
+        {
+            if (localHighScoreAlreadySaved)
+            {
+                return;
+            }
+
+            var gameScore = new GameScore()
+            {
+                Value = this.currentGameScore,
+                PlayerName = obj.ToString()
+            };
+
+            await this.localData.GameScores.AddAsync(gameScore);
+            Toast.Message("Success!", "Your score is saved!", ToastMessageIconsEnum.Smile);
+
+            localHighScoreAlreadySaved = true;
+        }
+
+        public long CurrentGameScore
         {
             get
             {
@@ -62,13 +96,26 @@
             return this.shapes;
         }
 
-        public void InitGame()
+        public async Task<bool> PlayerHighScored()
+        {
+            var result = false;
+
+            var localHighScore = await this.localData.GetCurrentHighScoreAsync();
+            if (this.CurrentGameScore > localHighScore.Value)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        private void InitGame()
         {
             this.rectPool = new ObjectPool<RectangleViewModel>(() => new RectangleViewModel());
             this.trianglePool = new ObjectPool<TriangleViewModel>(() => new TriangleViewModel());
             this.circlePool = new ObjectPool<CircleViewModel>(() => new CircleViewModel());
             this.shapes = new List<ShapeBaseViewModel>();
-
+            this.localHighScoreAlreadySaved = false;
             this.random = new Random();
         }
 
@@ -196,11 +243,6 @@
             }
 
             this.shapes.Remove(shapeToRemove);
-        }
-
-        public void EndGame()
-        {
-
         }
 
         private bool doOverlap(P l1, P r1, P l2, P r2)

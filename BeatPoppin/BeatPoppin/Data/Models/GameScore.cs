@@ -11,5 +11,7 @@
 
         [NotNull]
         public long Value { get; set; }
+        
+        public string PlayerName { get; set; }
     }
 }

@@ -6,7 +6,9 @@
         private double top;
         private double size;
         private double expirationTime;
-        
+
+        public abstract int ScoreValue { get; }
+
         public double Left
         {
             get
