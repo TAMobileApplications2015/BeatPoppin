@@ -121,6 +121,7 @@ namespace BeatPoppin.Pages
                     }
                 };
 
+                //shapeToAdd.Tapped += this.TriangleTapped;
                 shapeToAdd.ManipulationStarted += this.TriangleManipulationStarted;
                 shapeToAdd.ManipulationDelta += this.TriangleManipulationDelta;
                 shapeToAdd.ManipulationCompleted += this.TriangleManipulationCompleted;
@@ -204,18 +205,17 @@ namespace BeatPoppin.Pages
         #endregion
 
         // TRIANGLE SWIPE GESTURE
-        private UIElement testTriangles;
         #region TriangleAnimation
+        //private void TriangleTapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    this.ViewModel.UpdateShapesTime(3000);
+        //    // TESTING
+        //    // GAMEVIEWMODEL ALWAYS RETURNS TRIANGLE
+        //}
+
         private void TriangleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-            if (this.testTriangles == null)
-            {
-                this.testTriangles = sender as UIElement;
-            }
-            else
-            {
-                bool areEqual = this.testTriangles.Equals(sender as UIElement);
-            }
+
         }
 
         private void TriangleManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)

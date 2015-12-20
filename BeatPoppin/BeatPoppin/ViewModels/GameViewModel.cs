@@ -95,6 +95,18 @@
             foreach (var shape in shapesToRemove)
             {
                 this.shapes.Remove(shape);
+                if (shape is RectangleViewModel)
+                {
+                    this.rectPool.PutObject(shape as RectangleViewModel);
+                }
+                else if (shape is CircleViewModel)
+                {
+                    this.circlePool.PutObject(shape as CircleViewModel);
+                }
+                else
+                {
+                    this.trianglePool.PutObject(shape as TriangleViewModel);
+                }
             }
 
             foreach (var shape in this.shapes)
@@ -117,8 +129,7 @@
                 {
                     isShapeValid = true;
                 }
-
-                // TODO: fix this silly algorithm
+                
                 foreach (var shape in this.shapes)
                 {
                     if (randomTop != shape.Top && randomLeft != shape.Left)
@@ -135,6 +146,7 @@
                         if (doOverlap(x1, y1, x2, y2))
                         {
                             isShapeValid = false;
+                            break;
                         }
                     }
                     else
@@ -144,6 +156,7 @@
                     }
                 }
 
+                //var randomNumber = 1;
                 var randomNumber = this.random.Next(3);
                 switch (randomNumber)
                 {
@@ -170,7 +183,12 @@
             return randomShape;
         }
 
-        bool doOverlap(P l1, P r1, P l2, P r2)
+        public void EndGame()
+        {
+
+        }
+
+        private bool doOverlap(P l1, P r1, P l2, P r2)
         {
             if ((l1.x < r2.x) && (r1.x > l2.x) && (l1.y < r2.y) && (r1.y > l2.y))
             {
@@ -185,11 +203,6 @@
         private class P
         {
             public double x, y;
-        }
-
-        public void EndGame()
-        {
-
         }
     }
 }
