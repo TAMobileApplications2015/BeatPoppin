@@ -24,10 +24,9 @@
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
                             Stretch="Fill"/>
-            <Canvas x:Name="Canvas" Background="Transparent">
-                <ItemsControl Name="icShapes"
-                      VerticalAlignment="Stretch"/>
-            </Canvas>
+            <Canvas x:Name="Canvas" Background="Transparent"
+                    Height="500"
+                    Width="500"/>
         </Grid>
     </Grid>
 </Page>
