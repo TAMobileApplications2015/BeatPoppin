@@ -27,8 +27,10 @@ namespace BeatPoppin.Pages
     /// </summary>
     public sealed partial class GamePage : Page
     {
+        private const double ShapeStartsToExpireAtMilliSeconds = 1000;
+        private const int MaxShapesOnCanvas = 10;
         private double currentGameStage = 3000;
-        private IEnumerable<UIElement> currentElements = new List<UIElement>();
+        private Dictionary<Shape, double> shapesExpirationTime = new Dictionary<Shape, double>();
 
         public GamePage()
         {
@@ -49,45 +51,44 @@ namespace BeatPoppin.Pages
             }
         }
 
+        public bool GameOver { get; private set; }
+
         private void StartGame()
         {
             // TODO: check if those params are correct
-            var firstShapes = this.ViewModel.StartGame(this.Canvas.Height, this.Canvas.ActualWidth);
+            var firstShapes = this.ViewModel.StartGame(this.Canvas.Height, this.Canvas.Width);
             foreach (var shape in firstShapes)
             {
                 this.AddShapeToCanvas(shape);
             }
 
-            //var timer = new DispatcherTimer();
-            //timer.Interval = TimeSpan.FromMilliseconds(this.currentGameStage);
-            //timer.Tick += (snd, args) =>
-            //{
-            //    if (enemyIndex >= enemiesCount - 1)
-            //    {
-            //        timer.Stop();
-            //    }
-            //    var enemy = this.AddEnemyAtRandomPosition();
-            //    this.enemies.Add(enemy);
-            //    this.gameObjects.Add(enemy);
-            //    enemyIndex++;
-            //};
-            //var test = this.Canvas.Children;
-            //var anotherTest = test[1];
-            //var top = Canvas.GetTop(anotherTest)+ 100;
-            //var left = Canvas.GetLeft(anotherTest) + 100;
-            //Canvas.SetTop(anotherTest, top);
-            //Canvas.SetTop(anotherTest, left);
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(this.currentGameStage);
+            timer.Tick += (snd, args) =>
+            {
+                if (this.GameOver)
+                {
+                    timer.Stop();
+                }
 
-            //var testt = new Rectangle();
-            //var t = AnimationProperties.GetShapeIsExpiring(testt);
-            //AnimationProperties.SetShapeIsExpiring(testt, true);
-            //AnimationProperties.SetTest(testt, )
-            //testt.Height = 50;
-            //testt.Width = 50;
-            //testt.Fill = new SolidColorBrush(Colors.Blue);
-            //Canvas.SetTop(testt, 200);
-            //Canvas.SetLeft(testt, 200);
-            //this.Canvas.Children.Add(testt);
+                if (this.currentGameStage <= 0)
+                {
+                    this.currentGameStage = new Random().Next(500,2000);
+                }
+
+                if (this.shapesExpirationTime.Count < MaxShapesOnCanvas)
+                {
+                    var newShape = this.ViewModel.GetShapeAtRandomPosition();
+                    this.AddShapeToCanvas(newShape);
+                }
+
+                var randomExpirationTimeStep = new Random().Next(1, (int)Math.Ceiling((this.currentGameStage / 5)));
+                this.currentGameStage -= randomExpirationTimeStep;
+                this.UpdateShapes(randomExpirationTimeStep);
+                timer.Interval = TimeSpan.FromMilliseconds(this.currentGameStage);
+            };
+
+            timer.Start();
         }
 
         private void AddShapeToCanvas(ShapeBaseViewModel shape)
@@ -96,6 +97,8 @@ namespace BeatPoppin.Pages
             if (shape is RectangleViewModel)
             {
                 shapeToAdd = new Rectangle();
+
+                shapeToAdd.Tapped += this.RectangleTapped;
                 shapeToAdd.ManipulationStarted += this.RectangleManipulationStarted;
                 shapeToAdd.ManipulationDelta += this.RectangleManipulationDelta;
                 shapeToAdd.ManipulationCompleted += this.RectangleManipulationCompleted;
@@ -104,6 +107,8 @@ namespace BeatPoppin.Pages
             else if (shape is CircleViewModel)
             {
                 shapeToAdd = new Ellipse();
+
+                shapeToAdd.Tapped += this.CircleTapped;
                 shapeToAdd.ManipulationStarted += this.CircleManipulationStarted;
                 shapeToAdd.ManipulationDelta += this.CircleManipulationDelta;
                 shapeToAdd.ManipulationCompleted += this.CircleManipulationCompleted;
@@ -121,7 +126,7 @@ namespace BeatPoppin.Pages
                     }
                 };
 
-                //shapeToAdd.Tapped += this.TriangleTapped;
+                shapeToAdd.Tapped += this.TriangleTapped;
                 shapeToAdd.ManipulationStarted += this.TriangleManipulationStarted;
                 shapeToAdd.ManipulationDelta += this.TriangleManipulationDelta;
                 shapeToAdd.ManipulationCompleted += this.TriangleManipulationCompleted;
@@ -131,9 +136,44 @@ namespace BeatPoppin.Pages
             shapeToAdd.Height = shape.Size;
             shapeToAdd.Width = shape.Size;
             shapeToAdd.Fill = new SolidColorBrush(Colors.AliceBlue);
+
+            shapesExpirationTime.Add(shapeToAdd, shape.ExpirationTime);
+            //ShapeProperties.SetExpirationTime(shapeToAdd, shape.ExpirationTime);
+
             this.Canvas.Children.Add(shapeToAdd);
             Canvas.SetTop(shapeToAdd, shape.Top);
             Canvas.SetLeft(shapeToAdd, shape.Left);
+        }
+
+        private void UpdateShapes(double currentIntervalStepTime)
+        {
+            var shapes = this.Canvas.Children;
+            foreach (var s in shapes)
+            {
+                var shape = s as Shape;
+                var shapeExpirationTime = shapesExpirationTime[shape];
+                shapesExpirationTime[shape] -= currentIntervalStepTime;
+                if (shapesExpirationTime[shape] <= ShapeStartsToExpireAtMilliSeconds)
+                {
+                    if (shapesExpirationTime[shape] <= 0)
+                    {
+                        this.GameOver = true;
+                    }
+                    else
+                    {
+                        AnimationProperties.SetShapeIsExpiring(shape, true);
+                    }
+                }
+            }
+        }
+
+        private void RemoveShape(Shape shape)
+        {
+            var top = Canvas.GetTop(shape);
+            var left = Canvas.GetLeft(shape);
+            this.Canvas.Children.Remove(shape);
+            this.ViewModel.RemoveShape(top, left);
+            this.shapesExpirationTime.Remove(shape);
         }
 
         private async void LoadPreviewAsBackground()
@@ -158,8 +198,16 @@ namespace BeatPoppin.Pages
 
         }
 
+        // FOR TEST PURPOSES ALL HAVE TAPPED EVENT ~~~~~~~~~~
         // CIRCLE PINCH GESTURE
-        #region CircleAnimation
+        #region CircleGestures
+        private void CircleTapped(object sender, TappedRoutedEventArgs e)
+        {
+            var shape = sender as Shape;
+            AnimationProperties.SetCircleIsDestroyed(shape, true);
+            this.RemoveShape(shape);
+        }
+
         private void CircleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
 
@@ -182,7 +230,14 @@ namespace BeatPoppin.Pages
         #endregion
 
         // RECT ROTATE GESTURE
-        #region RectangleAnimation
+        #region RectangleGestures
+        private void RectangleTapped(object sender, TappedRoutedEventArgs e)
+        {
+            var shape = sender as Shape;
+            AnimationProperties.SetRectIsDestroyed(shape, true);
+            this.RemoveShape(shape);
+        }
+
         private void RectangleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
 
@@ -205,13 +260,13 @@ namespace BeatPoppin.Pages
         #endregion
 
         // TRIANGLE SWIPE GESTURE
-        #region TriangleAnimation
-        //private void TriangleTapped(object sender, TappedRoutedEventArgs e)
-        //{
-        //    this.ViewModel.UpdateShapesTime(3000);
-        //    // TESTING
-        //    // GAMEVIEWMODEL ALWAYS RETURNS TRIANGLE
-        //}
+        #region TriangleGestures
+        private void TriangleTapped(object sender, TappedRoutedEventArgs e)
+        {
+            var shape = sender as Shape;
+            AnimationProperties.SetTriangleIsDestroyed(shape, true);
+            this.RemoveShape(shape);
+        }
 
         private void TriangleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {

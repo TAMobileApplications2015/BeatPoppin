@@ -21,7 +21,8 @@
 
         private const int InitialShapesCount = 10;
         private const int DefaultShapeSize = 100;
-        private const double DefaultShapeExpirationTime = 3000;
+        private const int MinDefaultShapeExpirationTime = 1500;
+        private const int MaxDefaultShapeExpirationTime = 3000;
         private ulong currentGameScore;
         private ICollection<ShapeBaseViewModel> shapes;
         private ObjectPool<RectangleViewModel> rectPool;
@@ -155,8 +156,7 @@
                         break;
                     }
                 }
-
-                //var randomNumber = 1;
+                
                 var randomNumber = this.random.Next(3);
                 switch (randomNumber)
                 {
@@ -177,10 +177,25 @@
             randomShape.Top = randomTop;
             randomShape.Left = randomLeft;
             randomShape.Size = DefaultShapeSize;
-            randomShape.ExpirationTime = DefaultShapeExpirationTime;
+            randomShape.ExpirationTime = this.random.Next(MinDefaultShapeExpirationTime, MaxDefaultShapeExpirationTime);
 
             this.shapes.Add(randomShape);
             return randomShape;
+        }
+
+        public void RemoveShape(double top, double left)
+        {
+            ShapeBaseViewModel shapeToRemove = null;
+            foreach (var shape in this.shapes)
+            {
+                if (shape.Top == top && shape.Left == left)
+                {
+                    shapeToRemove = shape;
+                    break;
+                }
+            }
+
+            this.shapes.Remove(shapeToRemove);
         }
 
         public void EndGame()
