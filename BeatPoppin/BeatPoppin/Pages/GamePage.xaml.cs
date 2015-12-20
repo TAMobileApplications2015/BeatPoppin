@@ -1,32 +1,18 @@
-﻿using BeatPoppin.AttachedProperties;
-using BeatPoppin.Commands;
-using BeatPoppin.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Windows.Input;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Media.Capture;
-using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Shapes;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
-namespace BeatPoppin.Pages
+﻿namespace BeatPoppin.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+    using BeatPoppin.AttachedProperties;
+    using BeatPoppin.ViewModels;
+    using System;
+    using System.Collections.Generic;
+    using Windows.Foundation;
+    using Windows.Media.Capture;
+    using Windows.UI;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Input;
+    using Windows.UI.Xaml.Media;
+    using Windows.UI.Xaml.Navigation;
+    using Windows.UI.Xaml.Shapes;
     public sealed partial class GamePage : Page
     {
         private const double ShapeStartsToExpireAtMilliSeconds = 1000;
@@ -77,6 +63,7 @@ namespace BeatPoppin.Pages
                     timer.Stop();
                 }
 
+            //this.Canvas.Children.Add(testt);
                 if (this.currentGameStage <= 0)
                 {
                     this.currentGameStage = this.random.Next(500,2000);
@@ -126,6 +113,7 @@ namespace BeatPoppin.Pages
                 shapeToAdd.ManipulationDelta += this.RectangleManipulationDelta;
                 shapeToAdd.ManipulationCompleted += this.RectangleManipulationCompleted;
                 shapeToAdd.ManipulationInertiaStarting += this.RectangleManipulationInertiaStarting;
+                shapeToAdd.ManipulationMode = ManipulationModes.Rotate;
             }
             else if (shape is CircleViewModel)
             {
@@ -136,6 +124,7 @@ namespace BeatPoppin.Pages
                 shapeToAdd.ManipulationDelta += this.CircleManipulationDelta;
                 shapeToAdd.ManipulationCompleted += this.CircleManipulationCompleted;
                 shapeToAdd.ManipulationInertiaStarting += this.CircleManipulationInertiaStarting;
+                shapeToAdd.ManipulationMode = ManipulationModes.Scale;
             }
             else
             {
@@ -149,11 +138,13 @@ namespace BeatPoppin.Pages
                     }
                 };
 
+
                 shapeToAdd.Tapped += this.TriangleTapped;
                 shapeToAdd.ManipulationStarted += this.TriangleManipulationStarted;
                 shapeToAdd.ManipulationDelta += this.TriangleManipulationDelta;
                 shapeToAdd.ManipulationCompleted += this.TriangleManipulationCompleted;
                 shapeToAdd.ManipulationInertiaStarting += this.TriangleManipulationInertiaStarting;
+                shapeToAdd.ManipulationMode = ManipulationModes.TranslateX;
             }
 
             shapeToAdd.Height = shape.Size;
@@ -232,6 +223,7 @@ namespace BeatPoppin.Pages
 
         // FOR TEST PURPOSES ALL HAVE TAPPED EVENT ~~~~~~~~~~
         // CIRCLE PINCH GESTURE
+
         #region CircleGestures
         private void CircleTapped(object sender, TappedRoutedEventArgs e)
         {
@@ -242,12 +234,16 @@ namespace BeatPoppin.Pages
 
         private void CircleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-
+            
         }
 
         private void CircleManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
+            if (e.Delta.Scale > 0)
+            {
+                var obj = sender as Ellipse;
+                AnimationProperties.SetCircleIsDestroyed(obj, true);
+            }
         }
 
         private void CircleManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
@@ -262,6 +258,7 @@ namespace BeatPoppin.Pages
         #endregion
 
         // RECT ROTATE GESTURE
+
         #region RectangleGestures
         private void RectangleTapped(object sender, TappedRoutedEventArgs e)
         {
@@ -277,7 +274,11 @@ namespace BeatPoppin.Pages
 
         private void RectangleManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
+            if (e.Delta.Rotation > 1)
+            {
+                var obj = sender as Rectangle;
+                AnimationProperties.SetRectIsDestroyed(obj, true);
+            }
         }
 
         private void RectangleManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
@@ -292,6 +293,7 @@ namespace BeatPoppin.Pages
         #endregion
 
         // TRIANGLE SWIPE GESTURE
+        //}
         #region TriangleGestures
         private void TriangleTapped(object sender, TappedRoutedEventArgs e)
         {
@@ -307,7 +309,11 @@ namespace BeatPoppin.Pages
 
         private void TriangleManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
+            if (e.Delta.Translation.X > 5 || e.Delta.Translation.Y > 5)
+            {
+                var obj = sender as Polygon;
+                AnimationProperties.SetTriangleIsDestroyed(obj, true);
+            }
         }
 
         private void TriangleManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)

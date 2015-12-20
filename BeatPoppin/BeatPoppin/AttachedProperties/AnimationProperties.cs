@@ -1,14 +1,13 @@
 ﻿namespace BeatPoppin.AttachedProperties
 {
+    using System;
     using Windows.UI;
     using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Media;
     using Windows.UI.Xaml.Shapes;
 
     public class AnimationProperties
     {
-        private static DispatcherTimer timer = new DispatcherTimer();
-
+        public static double stepAnimation = 20;
         public static bool GetShapeIsExpiring(DependencyObject obj)
         {
             return (bool)obj.GetValue(ShapeIsExpiringProperty);
@@ -21,13 +20,14 @@
 
         // Using a DependencyProperty as the backing store for ShapeIsExpiring.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShapeIsExpiringProperty =
+
             DependencyProperty.RegisterAttached("ShapeIsExpiring", typeof(bool), typeof(Shape), new PropertyMetadata(false, new PropertyChangedCallback(HandleShapeIsExpiring)));
 
         private static void HandleShapeIsExpiring(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: Better animation for ExpiringShape
             var shape = d as Shape;
-            shape.Fill = new SolidColorBrush(Colors.Red);
+            shape.Fill = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Red);
         }
 
         public static bool GetCircleIsDestroyed(DependencyObject obj)
@@ -42,13 +42,35 @@
 
         // Using a DependencyProperty as the backing store for CircleIsDestroyed.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CircleIsDestroyedProperty =
+
             DependencyProperty.RegisterAttached("CircleIsDestroyed", typeof(bool), typeof(Shape), new PropertyMetadata(false, new PropertyChangedCallback(HandleCircleIsDestroyed)));
 
         private static void HandleCircleIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: ANIMATE CIRCLE
+            var obj = d as Ellipse;
+            var step = 0;
+
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Tick += (snd, args) =>
+            {
+                if (step > stepAnimation || obj.Width < step)
+                {
+                    timer.Stop();
+                    // TODO: add obj to kill
+                }
+                else
+                {
+                    obj.Width -= step;
+                    obj.Height -= step;
+                    obj.Opacity -= 0.01;
+                }
+                step++;
+            };
+            timer.Start();
         }
-        
+
         public static bool GetRectIsDestroyed(DependencyObject obj)
         {
             return (bool)obj.GetValue(RectIsDestroyedProperty);
@@ -61,11 +83,34 @@
 
         // Using a DependencyProperty as the backing store for RectIsDestroyed.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RectIsDestroyedProperty =
+
             DependencyProperty.RegisterAttached("RectIsDestroyed", typeof(bool), typeof(Shape), new PropertyMetadata(false, new PropertyChangedCallback(HandleRectIsDestroyed)));
 
         private static void HandleRectIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: ANIMATE RECTANGLE
+            var step = 0;
+
+            var obj = d as Rectangle;
+
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Tick += (snd, args) =>
+            {
+                if (step > stepAnimation || obj.Width < step)
+                {
+                    timer.Stop();
+                    // TODO: add obj to kill
+                }
+                else
+                {
+                    obj.Width -= step;
+                    obj.Height += step;
+                    obj.Opacity -= 0.01;
+                }
+                step++;
+            };
+            timer.Start();
         }
 
         public static bool GetTriangleIsDestroyed(DependencyObject obj)
@@ -80,11 +125,32 @@
 
         // Using a DependencyProperty as the backing store for TriangleIsDestroyed.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TriangleIsDestroyedProperty =
+
             DependencyProperty.RegisterAttached("TriangleIsDestroyed", typeof(bool), typeof(Shape), new PropertyMetadata(false, new PropertyChangedCallback(HandleTriangleIsDestroyed)));
 
         private static void HandleTriangleIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: ANIMATE TRIANGLE
+            var step = 0;
+
+            var obj = d as Polygon;
+
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Tick += (snd, args) =>
+            {
+                if (step > stepAnimation || obj.Width < step)
+                {
+                    timer.Stop();
+                    // TODO: add obj to kill
+                }
+                else
+                {
+                    obj.Opacity -= 0.01;
+                }
+                step++;
+            };
+            timer.Start();
         }
     }
 }
