@@ -64,12 +64,13 @@
                     this.PrepareScoreScreen();
                     timer.Stop();
                 }
-
-            //this.Canvas.Children.Add(testt);
+                
                 if (this.currentGameStage <= 0)
                 {
                     this.currentGameStage = this.random.Next(500,2000);
                 }
+
+                this.ClearCanvasFromDestroyedShapes();
 
                 if (this.shapesExpirationTime.Count < MaxShapesOnCanvas)
                 {
@@ -184,6 +185,23 @@
             }
         }
 
+        private void ClearCanvasFromDestroyedShapes()
+        {
+            var shapesToRemove = new List<Shape>();
+            foreach (var element in this.Canvas.Children)
+            {
+                if (ShapeProperties.GetIsDestroyed(element))
+                {
+                    shapesToRemove.Add(element as Shape);
+                }
+            }
+
+            foreach (var shape in shapesToRemove)
+            {
+                this.RemoveShape(shape as Shape);
+            }
+        }
+
         private void RemoveShape(Shape shape)
         {
             var shapeValue = ShapeProperties.GetScoreValue(shape);
@@ -232,7 +250,6 @@
 
         // FOR TEST PURPOSES ALL HAVE TAPPED EVENT ~~~~~~~~~~
         // CIRCLE PINCH GESTURE
-
         #region CircleGestures
         private void CircleTapped(object sender, TappedRoutedEventArgs e)
         {
@@ -250,8 +267,8 @@
         {
             if (e.Delta.Scale > 0)
             {
-                var obj = sender as Ellipse;
-                AnimationProperties.SetCircleIsDestroyed(obj, true);
+                var shape = sender as Ellipse;
+                AnimationProperties.SetCircleIsDestroyed(shape, true);
             }
         }
 
@@ -267,13 +284,11 @@
         #endregion
 
         // RECT ROTATE GESTURE
-
         #region RectangleGestures
         private void RectangleTapped(object sender, TappedRoutedEventArgs e)
         {
             var shape = sender as Shape;
             AnimationProperties.SetRectIsDestroyed(shape, true);
-            this.RemoveShape(shape);
         }
 
         private void RectangleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
@@ -285,8 +300,8 @@
         {
             if (e.Delta.Rotation > 1)
             {
-                var obj = sender as Rectangle;
-                AnimationProperties.SetRectIsDestroyed(obj, true);
+                var shape = sender as Rectangle;
+                AnimationProperties.SetRectIsDestroyed(shape, true);
             }
         }
 
@@ -302,13 +317,11 @@
         #endregion
 
         // TRIANGLE SWIPE GESTURE
-        //}
         #region TriangleGestures
         private void TriangleTapped(object sender, TappedRoutedEventArgs e)
         {
             var shape = sender as Shape;
             AnimationProperties.SetTriangleIsDestroyed(shape, true);
-            this.RemoveShape(shape);
         }
 
         private void TriangleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
@@ -320,8 +333,8 @@
         {
             if (e.Delta.Translation.X > 5 || e.Delta.Translation.Y > 5)
             {
-                var obj = sender as Polygon;
-                AnimationProperties.SetTriangleIsDestroyed(obj, true);
+                var shape = sender as Polygon;
+                AnimationProperties.SetTriangleIsDestroyed(shape, true);
             }
         }
 

@@ -1,18 +1,13 @@
 ﻿namespace BeatPoppin.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using System.Windows.Input;
     using Commands;
     using Data;
     using Data.Models;
     using Helpers;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Windows.Input;
-    using Windows.Foundation;
-    using Windows.UI.Xaml.Controls;
 
     public class GameViewModel : BaseViewModel
     {
@@ -55,25 +50,6 @@
             }
         }
 
-        private async void ExecSaveGameScore(object obj)
-        {
-            if (localHighScoreAlreadySaved)
-            {
-                return;
-            }
-
-            var gameScore = new GameScore()
-            {
-                Value = this.currentGameScore,
-                PlayerName = obj.ToString()
-            };
-
-            await this.localData.GameScores.AddAsync(gameScore);
-            Toast.Message("Success!", "Your score is saved!", ToastMessageIconsEnum.Smile);
-
-            localHighScoreAlreadySaved = true;
-        }
-
         public long CurrentGameScore
         {
             get
@@ -87,28 +63,6 @@
             }
         }
 
-        public IEnumerable<ShapeBaseViewModel> StartGame(double canvasHeight, double canvasWidth)
-        {
-            this.canvasHeight = canvasHeight;
-            this.canvasWidth = canvasWidth;
-            this.InitGame();
-            this.GetFirstShapes();
-            return this.shapes;
-        }
-
-        public async Task<bool> PlayerHighScored()
-        {
-            var result = false;
-
-            var localHighScore = await this.localData.GetCurrentHighScoreAsync();
-            if (this.CurrentGameScore > localHighScore.Value)
-            {
-                result = true;
-            }
-
-            return result;
-        }
-
         private void InitGame()
         {
             this.rectPool = new ObjectPool<RectangleViewModel>(() => new RectangleViewModel());
@@ -119,6 +73,15 @@
             this.random = new Random();
         }
 
+        public IEnumerable<ShapeBaseViewModel> StartGame(double canvasHeight, double canvasWidth)
+        {
+            this.canvasHeight = canvasHeight;
+            this.canvasWidth = canvasWidth;
+            this.InitGame();
+            this.GetFirstShapes();
+            return this.shapes;
+        }
+
         private IEnumerable<ShapeBaseViewModel> GetFirstShapes()
         {
             for (int i = 0; i < InitialShapesCount; i++)
@@ -127,6 +90,73 @@
             }
 
             return this.shapes;
+        }
+
+        public ShapeBaseViewModel GetShapeAtRandomPosition()
+        {
+            var isShapeValid = false;
+            ShapeBaseViewModel randomShape = null;
+            int randomTop = 0;
+            int randomLeft = 0;
+            while (!isShapeValid)
+            {
+                randomTop = this.random.Next((int)this.canvasHeight - DefaultShapeSize + 1);
+                randomLeft = this.random.Next((int)this.canvasWidth - DefaultShapeSize + 1);
+                if (this.shapes.Count == 0)
+                {
+                    isShapeValid = true;
+                }
+
+                foreach (var shape in this.shapes)
+                {
+                    if (randomTop != shape.Top && randomLeft != shape.Left)
+                    {
+                        isShapeValid = true;
+                        var top = shape.Top;
+                        var left = shape.Left;
+                        var size = shape.Size;
+
+                        P x1 = new P { x = randomTop, y = randomLeft };
+                        P y1 = new P { x = randomTop + DefaultShapeSize, y = randomLeft + DefaultShapeSize };
+                        P x2 = new P { x = top, y = left };
+                        P y2 = new P { x = top + DefaultShapeSize, y = left + DefaultShapeSize };
+                        if (doOverlap(x1, y1, x2, y2))
+                        {
+                            isShapeValid = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        isShapeValid = false;
+                        break;
+                    }
+                }
+
+                var randomNumber = this.random.Next(3);
+                switch (randomNumber)
+                {
+                    case 0:
+                        randomShape = this.rectPool.GetObject();
+                        break;
+                    case 1:
+                        randomShape = this.trianglePool.GetObject();
+                        break;
+                    case 2:
+                        randomShape = this.circlePool.GetObject();
+                        break;
+                    default:
+                        break;
+                };
+            }
+
+            randomShape.Top = randomTop;
+            randomShape.Left = randomLeft;
+            randomShape.Size = DefaultShapeSize;
+            randomShape.ExpirationTime = this.random.Next(MinDefaultShapeExpirationTime, MaxDefaultShapeExpirationTime);
+
+            this.shapes.Add(randomShape);
+            return randomShape;
         }
 
         public void UpdateShapesTime(double currentIntervalStepTime)
@@ -163,73 +193,6 @@
             }
         }
 
-        public ShapeBaseViewModel GetShapeAtRandomPosition()
-        {
-            var isShapeValid = false;
-            ShapeBaseViewModel randomShape = null;
-            int randomTop = 0;
-            int randomLeft = 0;
-            while (!isShapeValid)
-            {
-                randomTop = this.random.Next((int)this.canvasHeight - DefaultShapeSize + 1);
-                randomLeft = this.random.Next((int)this.canvasWidth - DefaultShapeSize + 1);
-                if (this.shapes.Count == 0)
-                {
-                    isShapeValid = true;
-                }
-                
-                foreach (var shape in this.shapes)
-                {
-                    if (randomTop != shape.Top && randomLeft != shape.Left)
-                    {
-                        isShapeValid = true;
-                        var top = shape.Top;
-                        var left = shape.Left;
-                        var size = shape.Size;
-
-                        P x1 = new P { x = randomTop, y = randomLeft };
-                        P y1 = new P { x = randomTop + DefaultShapeSize, y = randomLeft + DefaultShapeSize };
-                        P x2 = new P { x = top, y = left };
-                        P y2 = new P { x = top + DefaultShapeSize, y = left + DefaultShapeSize };
-                        if (doOverlap(x1, y1, x2, y2))
-                        {
-                            isShapeValid = false;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        isShapeValid = false;
-                        break;
-                    }
-                }
-                
-                var randomNumber = this.random.Next(3);
-                switch (randomNumber)
-                {
-                    case 0:
-                        randomShape = this.rectPool.GetObject();
-                        break;
-                    case 1:
-                        randomShape = this.trianglePool.GetObject();
-                        break;
-                    case 2:
-                        randomShape = this.circlePool.GetObject();
-                        break;
-                    default:
-                        break;
-                };
-            }
-
-            randomShape.Top = randomTop;
-            randomShape.Left = randomLeft;
-            randomShape.Size = DefaultShapeSize;
-            randomShape.ExpirationTime = this.random.Next(MinDefaultShapeExpirationTime, MaxDefaultShapeExpirationTime);
-
-            this.shapes.Add(randomShape);
-            return randomShape;
-        }
-
         public void RemoveShape(double top, double left)
         {
             ShapeBaseViewModel shapeToRemove = null;
@@ -243,6 +206,38 @@
             }
 
             this.shapes.Remove(shapeToRemove);
+        }
+
+        public async Task<bool> PlayerHighScored()
+        {
+            var result = false;
+
+            var localHighScore = await this.localData.GetCurrentHighScoreAsync();
+            if (this.CurrentGameScore > localHighScore.Value)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        private async void ExecSaveGameScore(object obj)
+        {
+            if (localHighScoreAlreadySaved)
+            {
+                return;
+            }
+
+            var gameScore = new GameScore()
+            {
+                Value = this.currentGameScore,
+                PlayerName = obj.ToString()
+            };
+
+            await this.localData.GameScores.AddAsync(gameScore);
+            Toast.Message("Success!", "Your score is saved!", ToastMessageIconsEnum.Smile);
+
+            localHighScoreAlreadySaved = true;
         }
 
         private bool doOverlap(P l1, P r1, P l2, P r2)
