@@ -31,8 +31,7 @@
             </Grid>
         </Grid>
         <Grid x:Name="ScoreContainer"
-                  Background="#99999900"
-                  Visibility="Collapsed">
+              Visibility="Collapsed">
             <Grid VerticalAlignment="Center"
                       HorizontalAlignment="Center">
                 <Grid.RowDefinitions>
