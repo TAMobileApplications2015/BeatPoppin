@@ -1,30 +1,18 @@
-﻿using BeatPoppin.AttachedProperties;
-using BeatPoppin.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Media.Capture;
-using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Shapes;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
-namespace BeatPoppin.Pages
+﻿namespace BeatPoppin.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+    using BeatPoppin.AttachedProperties;
+    using BeatPoppin.ViewModels;
+    using System;
+    using System.Collections.Generic;
+    using Windows.Foundation;
+    using Windows.Media.Capture;
+    using Windows.UI;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Input;
+    using Windows.UI.Xaml.Media;
+    using Windows.UI.Xaml.Navigation;
+    using Windows.UI.Xaml.Shapes;
     public sealed partial class GamePage : Page
     {
         private double currentGameStage = 3000;
@@ -100,6 +88,7 @@ namespace BeatPoppin.Pages
                 shapeToAdd.ManipulationDelta += this.RectangleManipulationDelta;
                 shapeToAdd.ManipulationCompleted += this.RectangleManipulationCompleted;
                 shapeToAdd.ManipulationInertiaStarting += this.RectangleManipulationInertiaStarting;
+                shapeToAdd.ManipulationMode = ManipulationModes.Rotate;
             }
             else if (shape is CircleViewModel)
             {
@@ -108,6 +97,7 @@ namespace BeatPoppin.Pages
                 shapeToAdd.ManipulationDelta += this.CircleManipulationDelta;
                 shapeToAdd.ManipulationCompleted += this.CircleManipulationCompleted;
                 shapeToAdd.ManipulationInertiaStarting += this.CircleManipulationInertiaStarting;
+                shapeToAdd.ManipulationMode = ManipulationModes.Scale;
             }
             else
             {
@@ -121,11 +111,12 @@ namespace BeatPoppin.Pages
                     }
                 };
 
-                //shapeToAdd.Tapped += this.TriangleTapped;
+                // shapeToAdd.Tapped += this.TriangleTapped;
                 shapeToAdd.ManipulationStarted += this.TriangleManipulationStarted;
                 shapeToAdd.ManipulationDelta += this.TriangleManipulationDelta;
                 shapeToAdd.ManipulationCompleted += this.TriangleManipulationCompleted;
                 shapeToAdd.ManipulationInertiaStarting += this.TriangleManipulationInertiaStarting;
+                shapeToAdd.ManipulationMode = ManipulationModes.TranslateX;
             }
 
             shapeToAdd.Height = shape.Size;
@@ -162,12 +153,16 @@ namespace BeatPoppin.Pages
         #region CircleAnimation
         private void CircleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
-
+            
         }
 
         private void CircleManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
+            if (e.Delta.Scale > 0)
+            {
+                var obj = sender as Ellipse;
+                AnimationProperties.SetCircleIsDestroyed(obj, true);
+            }
         }
 
         private void CircleManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
@@ -190,7 +185,11 @@ namespace BeatPoppin.Pages
 
         private void RectangleManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
+            if (e.Delta.Rotation > 1)
+            {
+                var obj = sender as Rectangle;
+                AnimationProperties.SetRectIsDestroyed(obj, true);
+            }
         }
 
         private void RectangleManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
@@ -220,7 +219,11 @@ namespace BeatPoppin.Pages
 
         private void TriangleManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
+            if (e.Delta.Translation.X > 5 || e.Delta.Translation.Y > 5)
+            {
+                var obj = sender as Polygon;
+                AnimationProperties.SetTriangleIsDestroyed(obj, true);
+            }
         }
 
         private void TriangleManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)

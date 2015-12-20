@@ -1,14 +1,13 @@
 ﻿namespace BeatPoppin.AttachedProperties
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Input;
+    using Windows.UI.Xaml.Shapes;
+
     public class AnimationProperties
     {
+        private static double stepAnimation = 50;
+
         public static bool GetShapeIsExpiring(DependencyObject obj)
         {
             return (bool)obj.GetValue(ShapeIsExpiringProperty);
@@ -45,8 +44,29 @@
         private static void HandleCircleIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: ANIMATE CIRCLE
+            var obj = d as Ellipse;
+            var step = 0;
+
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Tick += (snd, args) =>
+            {
+                if (step > stepAnimation || obj.Width < step)
+                {
+                    timer.Stop();
+                    // TODO: add obj to kill
+                }
+                else
+                {
+                    obj.Width -= step;
+                    obj.Height -= step;
+                    obj.Opacity -= 0.01;
+                }
+                step++;
+            };
+            timer.Start();
         }
-        
+
         public static bool GetRectIsDestroyed(DependencyObject obj)
         {
             return (bool)obj.GetValue(RectIsDestroyedProperty);
@@ -64,6 +84,28 @@
         private static void HandleRectIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: ANIMATE RECTANGLE
+            var step = 0;
+
+            var obj = d as Rectangle;
+
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Tick += (snd, args) =>
+            {
+                if (step > stepAnimation || obj.Width < step)
+                {
+                    timer.Stop();
+                    // TODO: add obj to kill
+                }
+                else
+                {
+                    obj.Width -= step;
+                    obj.Height += step;
+                    obj.Opacity -= 0.01;
+                }
+                step++;
+            };
+            timer.Start();
         }
 
         public static bool GetTriangleIsDestroyed(DependencyObject obj)
@@ -83,6 +125,26 @@
         private static void HandleTriangleIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: ANIMATE TRIANGLE
+            var step = 0;
+
+            var obj = d as Polygon;
+
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Tick += (snd, args) =>
+            {
+                if (step > stepAnimation || obj.Width < step)
+                {
+                    timer.Stop();
+                    // TODO: add obj to kill
+                }
+                else
+                {
+                    obj.Opacity -= 0.01;
+                }
+                step++;
+            };
+            timer.Start();
         }
     }
 }
