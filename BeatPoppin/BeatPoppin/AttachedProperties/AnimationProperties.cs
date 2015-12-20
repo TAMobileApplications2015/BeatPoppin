@@ -1,13 +1,8 @@
 ﻿namespace BeatPoppin.AttachedProperties
 {
-    using System;
     using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Shapes;
-
     public class AnimationProperties
     {
-        private static double stepAnimation = 50;
-
         public static bool GetShapeIsExpiring(DependencyObject obj)
         {
             return (bool)obj.GetValue(ShapeIsExpiringProperty);
@@ -20,11 +15,14 @@
 
         // Using a DependencyProperty as the backing store for ShapeIsExpiring.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShapeIsExpiringProperty =
-            DependencyProperty.RegisterAttached("ShapeIsExpiring", typeof(bool), typeof(UIElement), new PropertyMetadata(false, new PropertyChangedCallback(HandleShapeIsExpiring)));
+
+            DependencyProperty.RegisterAttached("ShapeIsExpiring", typeof(bool), typeof(Shape), new PropertyMetadata(false, new PropertyChangedCallback(HandleShapeIsExpiring)));
 
         private static void HandleShapeIsExpiring(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            // TODO: ANIMATE SHAPE IS EXPIRING
+            // TODO: Better animation for ExpiringShape
+            var shape = d as Shape;
+            shape.Fill = new SolidColorBrush(Colors.Red);
         }
 
         public static bool GetCircleIsDestroyed(DependencyObject obj)
@@ -39,7 +37,8 @@
 
         // Using a DependencyProperty as the backing store for CircleIsDestroyed.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CircleIsDestroyedProperty =
-            DependencyProperty.RegisterAttached("CircleIsDestroyed", typeof(bool), typeof(UIElement), new PropertyMetadata(false, new PropertyChangedCallback(HandleCircleIsDestroyed)));
+
+            DependencyProperty.RegisterAttached("CircleIsDestroyed", typeof(bool), typeof(Shape), new PropertyMetadata(false, new PropertyChangedCallback(HandleCircleIsDestroyed)));
 
         private static void HandleCircleIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -79,7 +78,8 @@
 
         // Using a DependencyProperty as the backing store for RectIsDestroyed.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RectIsDestroyedProperty =
-            DependencyProperty.RegisterAttached("RectIsDestroyed", typeof(bool), typeof(UIElement), new PropertyMetadata(false, new PropertyChangedCallback(HandleRectIsDestroyed)));
+
+            DependencyProperty.RegisterAttached("RectIsDestroyed", typeof(bool), typeof(Shape), new PropertyMetadata(false, new PropertyChangedCallback(HandleRectIsDestroyed)));
 
         private static void HandleRectIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -120,7 +120,8 @@
 
         // Using a DependencyProperty as the backing store for TriangleIsDestroyed.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TriangleIsDestroyedProperty =
-            DependencyProperty.RegisterAttached("TriangleIsDestroyed", typeof(bool), typeof(UIElement), new PropertyMetadata(false, new PropertyChangedCallback(HandleTriangleIsDestroyed)));
+
+            DependencyProperty.RegisterAttached("TriangleIsDestroyed", typeof(bool), typeof(Shape), new PropertyMetadata(false, new PropertyChangedCallback(HandleTriangleIsDestroyed)));
 
         private static void HandleTriangleIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

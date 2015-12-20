@@ -99,6 +99,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AttachedProperties\AnimationProperties.cs" />
+    <Compile Include="AttachedProperties\ShapeProperties.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\RelayCommandWithParams.cs" />
     <Compile Include="Controls\NavigationView.xaml.cs">
