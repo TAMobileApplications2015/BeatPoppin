@@ -1,8 +1,13 @@
 ﻿namespace BeatPoppin.AttachedProperties
 {
+    using System;
+    using Windows.UI;
     using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Shapes;
+
     public class AnimationProperties
     {
+        public static double stepAnimation = 20;
         public static bool GetShapeIsExpiring(DependencyObject obj)
         {
             return (bool)obj.GetValue(ShapeIsExpiringProperty);
@@ -22,7 +27,7 @@
         {
             // TODO: Better animation for ExpiringShape
             var shape = d as Shape;
-            shape.Fill = new SolidColorBrush(Colors.Red);
+            shape.Fill = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Red);
         }
 
         public static bool GetCircleIsDestroyed(DependencyObject obj)
