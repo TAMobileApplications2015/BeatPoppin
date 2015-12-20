@@ -15,6 +15,8 @@
     using Windows.UI.Xaml.Shapes;
     public sealed partial class GamePage : Page
     {
+        private MediaCapture _mediaCaptureMgr;
+
         private const double ShapeStartsToExpireAtMilliSeconds = 1000;
         private const int MaxShapesOnCanvas = 10;
         private const string PlayerHighScoredMessage = "Yayy!! You are too good ;p";
@@ -26,8 +28,8 @@
         public GamePage()
         {
             this.InitializeComponent();
+
             this.ViewModel = new GameViewModel();
-            this.LoadPreviewAsBackground();
         }
 
         public GameViewModel ViewModel
@@ -195,30 +197,37 @@
 
         private async void StopPreviewAsBackground()
         {
-            MediaCapture mediaCaptureMgr = new MediaCapture();
-            await mediaCaptureMgr.StopPreviewAsync();
+            if (_mediaCaptureMgr != null)
+            {
+                await _mediaCaptureMgr.StopPreviewAsync();
+                _mediaCaptureMgr.Dispose();
+                _mediaCaptureMgr = null;
+            }
         }
 
         private async void LoadPreviewAsBackground()
         {
             // Using Windows.Media.Capture.MediaCapture APIs to stream from webcam
-            MediaCapture mediaCaptureMgr = new MediaCapture();
-            await mediaCaptureMgr.InitializeAsync();
+            _mediaCaptureMgr = new MediaCapture();
+            await _mediaCaptureMgr.InitializeAsync();
 
             // Start capture preview.                
-            this.myCaptureElement.Source = mediaCaptureMgr;
+            this.myCaptureElement.Source = _mediaCaptureMgr;
 
-            await mediaCaptureMgr.StartPreviewAsync();
+            await _mediaCaptureMgr.StartPreviewAsync();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            base.OnNavigatedTo(e);
+            this.LoadPreviewAsBackground();
             this.StartGame();
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
-
+            base.OnNavigatingFrom(e);
+            this.StopPreviewAsBackground();
         }
 
         // FOR TEST PURPOSES ALL HAVE TAPPED EVENT ~~~~~~~~~~
