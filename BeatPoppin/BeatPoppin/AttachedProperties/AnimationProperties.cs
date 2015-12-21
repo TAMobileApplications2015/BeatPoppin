@@ -77,7 +77,7 @@
 
         private static void HandleCircleIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            // TODO: ANIMATE CIRCLE
+            // TODO: BETTER ANIMATE CIRCLE
             var obj = d as Ellipse;
             var step = 2;
 
@@ -117,10 +117,48 @@
 
         private static void HandleRectIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            // TODO: ANIMATE RECTANGLE
+            // TODO: BETTER ANIMATE RECTANGLE
+            var step = 0;
+            var obj = d as Rectangle;
+
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Tick += (snd, args) =>
+            {
+                if (step > StepAnimation || obj.Width < step)
+                {
+                    ShapeProperties.SetIsDestroyed(obj, true);
+                    timer.Stop();
+                }
+                else
+                {
+                    obj.Opacity -= 0.1;
+                }
+
+                step++;
+            };
+            timer.Start();
+        }
+
+        public static bool GetTriangleIsDestroyed(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(TriangleIsDestroyedProperty);
+        }
+
+        public static void SetTriangleIsDestroyed(DependencyObject obj, bool value)
+        {
+            obj.SetValue(TriangleIsDestroyedProperty, value);
+        }
+
+        public static readonly DependencyProperty TriangleIsDestroyedProperty =
+            DependencyProperty.RegisterAttached("TriangleIsDestroyed", typeof(bool), typeof(Shape), new PropertyMetadata(false, new PropertyChangedCallback(HandleTriangleIsDestroyed)));
+
+        private static void HandleTriangleIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            // TODO: BETTER ANIMATE TRIANGLE
             var step = 0;
 
-            var obj = d as Rectangle;
+            var obj = d as Polygon;
 
             var timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(30);
@@ -142,44 +180,6 @@
                 step++;
             };
 
-            timer.Start();
-        }
-
-        public static bool GetTriangleIsDestroyed(DependencyObject obj)
-        {
-            return (bool)obj.GetValue(TriangleIsDestroyedProperty);
-        }
-
-        public static void SetTriangleIsDestroyed(DependencyObject obj, bool value)
-        {
-            obj.SetValue(TriangleIsDestroyedProperty, value);
-        }
-
-        public static readonly DependencyProperty TriangleIsDestroyedProperty =
-            DependencyProperty.RegisterAttached("TriangleIsDestroyed", typeof(bool), typeof(Shape), new PropertyMetadata(false, new PropertyChangedCallback(HandleTriangleIsDestroyed)));
-
-        private static void HandleTriangleIsDestroyed(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            // TODO: ANIMATE TRIANGLE
-            var step = 0;
-            var obj = d as Polygon;
-
-            var timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(50);
-            timer.Tick += (snd, args) =>
-            {
-                if (step > StepAnimation || obj.Width < step)
-                {
-                    ShapeProperties.SetIsDestroyed(obj, true);
-                    timer.Stop();
-                }
-                else
-                {
-                    obj.Opacity -= 0.1;
-                }
-
-                step++;
-            };
             timer.Start();
         }
     }

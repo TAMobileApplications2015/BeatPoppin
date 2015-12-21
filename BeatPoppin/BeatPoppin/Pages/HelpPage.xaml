@@ -8,6 +8,25 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <Grid VerticalAlignment="Center"
+              HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Circles must be Pinched-Out."
+                       FontSize="26"
+                       Grid.Row="0"
+                       TextAlignment="Center"/>
+            <TextBlock Text="Rectangles rotate."
+                       FontSize="26"
+                       Grid.Row="1" 
+                       TextAlignment="Center"/>
+            <TextBlock Text="Triangles must be Swipped."
+                       FontSize="26"
+                       Grid.Row="2"
+                       TextAlignment="Center"/>
+        </Grid>
     </Grid>
 </Page>
