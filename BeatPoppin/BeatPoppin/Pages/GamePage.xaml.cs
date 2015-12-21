@@ -13,6 +13,9 @@
     using Windows.UI.Xaml.Media;
     using Windows.UI.Xaml.Navigation;
     using Windows.UI.Xaml.Shapes;
+    using Windows.Media.Capture;
+    using Windows.Storage;
+    using Windows.Storage.Streams;
     public sealed partial class GamePage : Page
     {
         private MediaCapture _mediaCaptureMgr;
@@ -233,6 +236,37 @@
             this.myCaptureElement.Source = _mediaCaptureMgr;
 
             await _mediaCaptureMgr.StartPreviewAsync();
+        }
+
+        private void TakeAPhoto(object sender, TappedRoutedEventArgs e)
+        {
+            this.InitCamera();
+        }
+
+        private async void InitCamera()
+        {
+            var camera = new CameraCaptureUI();
+            camera.PhotoSettings.CroppedSizeInPixels = new Size(200, 200);
+            var photo = await camera.CaptureFileAsync(CameraCaptureUIMode.Photo);
+            if (photo == null)
+            {
+                return;
+            }
+
+            var file = await StorageFile.GetFileFromPathAsync(photo.Path);
+            byte[] photoAsArr = null;
+            using (IRandomAccessStream stream = await file.OpenReadAsync())
+            {
+                using (DataReader reader = new DataReader(stream.GetInputStreamAt(0)))
+                {
+                    await reader.LoadAsync((uint)stream.Size);
+                    byte[] Bytes = new byte[stream.Size];
+                    reader.ReadBytes(Bytes);
+                    photoAsArr = Bytes;
+                }
+            }
+
+            this.ViewModel.SavePlayerPicture(photoAsArr);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

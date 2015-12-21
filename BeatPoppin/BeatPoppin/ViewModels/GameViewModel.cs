@@ -28,6 +28,7 @@
         private double canvasHeight;
         private double canvasWidth;
         private bool localHighScoreAlreadySaved;
+        private Game currentGame;
 
         public GameViewModel()
         {
@@ -70,6 +71,7 @@
             this.circlePool = new ObjectPool<CircleViewModel>(() => new CircleViewModel());
             this.shapes = new List<ShapeBaseViewModel>();
             this.localHighScoreAlreadySaved = false;
+            this.currentGame = new Game();
             this.random = new Random();
         }
 
@@ -228,16 +230,18 @@
                 return;
             }
 
-            var gameScore = new GameScore()
-            {
-                Value = this.currentGameScore,
-                PlayerName = obj.ToString()
-            };
+            this.currentGame.Value = this.currentGameScore;
+            this.currentGame.PlayerName = obj.ToString();
 
-            await this.localData.GameScores.AddAsync(gameScore);
+            await this.localData.Games.AddAsync(this.currentGame);
             Toast.Message("Success!", "Your score is saved!", ToastMessageIconsEnum.Smile);
 
             localHighScoreAlreadySaved = true;
+        }
+
+        public void SavePlayerPicture(byte[] picture)
+        {
+            this.currentGame.PlayerPhoto = picture;
         }
 
         private bool doOverlap(P l1, P r1, P l2, P r2)

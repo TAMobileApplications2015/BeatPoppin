@@ -17,5 +17,12 @@
         {
             get { return GetRelationProperty<HighScore>(); }
         }
+
+        [ParseFieldName("Image")]
+        public ParseFile Image
+        {
+            get { return GetProperty<ParseFile>(); }
+            set { SetProperty<ParseFile>(value); }
+        }
     }
 }

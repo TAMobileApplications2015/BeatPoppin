@@ -23,16 +23,16 @@
             this.context.InitAsync();
         }
 
-        public IRepository<GameScore> GameScores => this.GetLocalRepository<GameScore>();
+        public IRepository<Game> Games => this.GetLocalRepository<Game>();
 
-        public async Task<GameScore> GetCurrentHighScoreAsync()
+        public async Task<Game> GetCurrentHighScoreAsync()
         {
-            var score = (await this.GameScores.GetAllAsync())
+            var score = (await this.Games.GetAllAsync())
                 .OrderByDescending(h => h.Value)
                 .FirstOrDefault();
             if (score == null)
             {
-                return new GameScore() { Value = 0 };
+                return new Game() { Value = 0 };
             }
 
             return score;

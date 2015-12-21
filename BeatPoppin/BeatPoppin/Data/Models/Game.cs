@@ -2,8 +2,8 @@
 {
     using SQLite.Net.Attributes;
 
-    [Table("GameScore")]
-    public class GameScore
+    [Table("Game")]
+    public class Game
     {
         [PrimaryKey]
         [AutoIncrement]
@@ -13,5 +13,7 @@
         public long Value { get; set; }
         
         public string PlayerName { get; set; }
+
+        public byte[] PlayerPhoto { get; set; }
     }
 }

@@ -136,7 +136,7 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height=".9*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="ImageHere"
+                    <Image Source="{Binding ImageSource}"
                                Grid.Row="0"/>
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>

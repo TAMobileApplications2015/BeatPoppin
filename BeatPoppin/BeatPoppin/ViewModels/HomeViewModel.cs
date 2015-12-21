@@ -11,11 +11,15 @@
     using Data;
     using BeatPoppin.Commands;
     using Data.Models;
+    using Parse;
+    using Windows.UI.Xaml.Media;
+    using Windows.UI.Xaml.Media.Imaging;
+    using System.IO;
+    using System.Net.Http;
     public class HomeViewModel : BaseViewModel
     {
         private LocalData localData;
         private RemoteData remoteData;
-        private long localPlayerCurrentHighscore;
 
         private List<StorageFile> playlist;
         private string musicPlayList;
@@ -23,6 +27,9 @@
         private ICommand playMusicCommand;
         private ICommand stopMusicCommand;
         private MediaElement musicPlayer;
+
+        private ImageSource imageSource;
+        private long localPlayerCurrentHighscore;
         private string remoteHighScoreUserName;
         private string remoteHighScoreValue;
 
@@ -69,6 +76,16 @@
             {
                 this.remoteHighScoreUserName = value;
                 this.OnPropertyChanged("RemoteHighScoreUserName");
+            }
+        }
+
+        public ImageSource ImageSource
+        {
+            get { return imageSource; }
+            set
+            {
+                imageSource = value;
+                this.OnPropertyChanged("ImageSource");
             }
         }
 
@@ -189,8 +206,11 @@
         {
             var remoteHighScore = await this.remoteData.GetCurrentHighScoreAsync();
             this.RemoteHighScoreValue = remoteHighScore.Value.ToString();
+
             var remoteUserScored = await this.remoteData.GetUserForScoreAsync(remoteHighScore);
             this.RemoteHighScoreUserName = remoteUserScored.Get<string>("displayName");
+            var image = remoteUserScored["Image"] as ParseFile;
+            this.ImageSource = new BitmapImage(new Uri(image.Url.AbsoluteUri));
 
             return remoteHighScore.Value;
         }
@@ -204,10 +224,14 @@
                 Value = localHighScore.Value
             };
 
+            var image = new ParseFile(localHighScore.Id + localHighScore.PlayerName + localHighScore.Value, localHighScore.PlayerPhoto);
+
             var user = new User()
             {
-                DisplayName = localHighScore.PlayerName
+                DisplayName = localHighScore.PlayerName,
+                Image = image
             };
+
 
             await this.remoteData.Highscores.AddAsync(highScore);
             await this.remoteData.Users.AddAsync(user);

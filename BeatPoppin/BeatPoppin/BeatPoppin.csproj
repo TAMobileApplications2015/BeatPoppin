@@ -109,7 +109,7 @@
     <Compile Include="Data\LocalData.cs" />
     <Compile Include="Data\LocalDb.cs" />
     <Compile Include="Data\LocalGenericRepository.cs" />
-    <Compile Include="Data\Models\GameScore.cs" />
+    <Compile Include="Data\Models\Game.cs" />
     <Compile Include="Data\Models\HighScore.cs" />
     <Compile Include="Data\Models\User.cs" />
     <Compile Include="Data\RemoteData.cs" />

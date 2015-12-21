@@ -13,7 +13,7 @@
         public async void InitAsync()
         {
             var connection = this.GetConnection();
-            await connection.CreateTableAsync<GameScore>();
+            await connection.CreateTableAsync<Game>();
         }
 
         public SQLiteAsyncConnection GetConnection()

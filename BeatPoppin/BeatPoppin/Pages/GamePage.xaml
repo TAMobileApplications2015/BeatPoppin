@@ -5,10 +5,8 @@
     xmlns:local="using:BeatPoppin.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:attachedProperties="using:BeatPoppin.AttachedProperties"
     mc:Ignorable="d">
-    <Page.Resources>
-        <!--<attachedBehaviors:Animation x:Key="test" />-->
-    </Page.Resources>
     <Grid>
         <Grid x:Name="GameContainer">
             <Grid.RowDefinitions>
@@ -20,12 +18,10 @@
                        TextAlignment="Center"/>
             <Grid Grid.Row="1">
                 <CaptureElement Name="myCaptureElement"
-                            Width="{Binding ElementName=Canvas, Path=Width}" 
-                            Height="{Binding ElementName=Canvas, Path=Height}"
-                            HorizontalAlignment="Left" 
-                            VerticalAlignment="Top" 
-                            Stretch="Fill"/>
+                                Stretch="Fill"/>
                 <Canvas x:Name="Canvas" Background="Transparent"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
                         Height="500"
                         Width="500"/>
             </Grid>
@@ -66,6 +62,7 @@
                         <Button Content="Take a Photo!" 
                                 Grid.Row="1"
                                 HorizontalAlignment="Center"
+                                Tapped="TakeAPhoto"
                                 Style="{StaticResource DefaultButtonStyle}"/>
                         <Button Content="All done." 
                                 Grid.Row="2"

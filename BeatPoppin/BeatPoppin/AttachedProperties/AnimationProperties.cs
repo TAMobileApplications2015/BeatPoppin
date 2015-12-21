@@ -46,10 +46,10 @@
         {
             // TODO: ANIMATE CIRCLE
             var obj = d as Ellipse;
-            var step = 0;
+            var step = 2;
 
             var timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Interval = TimeSpan.FromMilliseconds(500);
             timer.Tick += (snd, args) =>
             {
                 if (step > StepAnimation || obj.Width < step)
@@ -63,8 +63,6 @@
                     obj.Height -= step;
                     obj.Opacity -= 0.1;
                 }
-
-                step++;
             };
 
             timer.Start();
