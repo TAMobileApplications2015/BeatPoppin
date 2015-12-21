@@ -201,14 +201,12 @@
 
             foreach (var shape in shapesToRemove)
             {
-                this.RemoveShape(shape as Shape);
+                this.RemoveShapeFromCanvas(shape as Shape);
             }
         }
 
-        private void RemoveShape(Shape shape)
+        private void RemoveShapeFromCanvas(Shape shape)
         {
-            var shapeValue = ShapeProperties.GetScoreValue(shape);
-            this.ViewModel.CurrentGameScore += shapeValue;
             var top = Canvas.GetTop(shape);
             var left = Canvas.GetLeft(shape);
             this.Canvas.Children.Remove(shape);
@@ -288,8 +286,9 @@
         private void CircleTapped(object sender, TappedRoutedEventArgs e)
         {
             var shape = sender as Shape;
+            var shapeValue = ShapeProperties.GetScoreValue(shape);
+            this.ViewModel.CurrentGameScore += shapeValue;
             AnimationProperties.SetCircleIsDestroyed(shape, true);
-            this.RemoveShape(shape);
         }
 
         private void CircleManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
@@ -302,6 +301,8 @@
             if (e.Delta.Scale > 0)
             {
                 var shape = sender as Ellipse;
+                var shapeValue = ShapeProperties.GetScoreValue(shape);
+                this.ViewModel.CurrentGameScore += shapeValue;
                 AnimationProperties.SetCircleIsDestroyed(shape, true);
             }
         }
@@ -322,6 +323,8 @@
         private void RectangleTapped(object sender, TappedRoutedEventArgs e)
         {
             var shape = sender as Shape;
+            var shapeValue = ShapeProperties.GetScoreValue(shape);
+            this.ViewModel.CurrentGameScore += shapeValue;
             AnimationProperties.SetRectIsDestroyed(shape, true);
         }
 
@@ -335,6 +338,8 @@
             if (e.Delta.Rotation > 1)
             {
                 var shape = sender as Rectangle;
+                var shapeValue = ShapeProperties.GetScoreValue(shape);
+                this.ViewModel.CurrentGameScore += shapeValue;
                 AnimationProperties.SetRectIsDestroyed(shape, true);
             }
         }
@@ -355,6 +360,8 @@
         private void TriangleTapped(object sender, TappedRoutedEventArgs e)
         {
             var shape = sender as Shape;
+            var shapeValue = ShapeProperties.GetScoreValue(shape);
+            this.ViewModel.CurrentGameScore += shapeValue;
             AnimationProperties.SetTriangleIsDestroyed(shape, true);
         }
 
@@ -368,6 +375,8 @@
             if (e.Delta.Translation.X > 5 || e.Delta.Translation.Y > 5)
             {
                 var shape = sender as Polygon;
+                var shapeValue = ShapeProperties.GetScoreValue(shape);
+                this.ViewModel.CurrentGameScore += shapeValue;
                 AnimationProperties.SetTriangleIsDestroyed(shape, true);
             }
         }

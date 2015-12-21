@@ -136,7 +136,7 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height=".9*"/>
                     </Grid.RowDefinitions>
-                    <Image Source="{Binding ImageSource}"
+                    <Image Source="{Binding ImageSource, UpdateSourceTrigger=PropertyChanged}"
                                Grid.Row="0"/>
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
@@ -150,7 +150,7 @@
                                    Grid.Row="0"
                                    Grid.Column="0"
                                    TextAlignment="Center"/>
-                        <TextBox Text="{Binding RemoteHighScoreUserName}"
+                        <TextBox Text="{Binding RemoteHighScoreUserName, UpdateSourceTrigger=PropertyChanged}"
                                  Grid.Row="1"
                                  FontSize="18"
                                  Grid.Column="0"
@@ -162,7 +162,7 @@
                                    Grid.Row="2"
                                    Grid.Column="0"
                                    TextAlignment="Center"/>
-                        <TextBox Text="{Binding RemoteHighScoreValue}"
+                        <TextBox Text="{Binding RemoteHighScoreValue, UpdateSourceTrigger=PropertyChanged}"
                                  Grid.Row="3"
                                  FontSize="18"
                                  Grid.Column="0"

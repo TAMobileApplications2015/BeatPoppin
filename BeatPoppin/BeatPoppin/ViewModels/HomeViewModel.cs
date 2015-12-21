@@ -209,8 +209,14 @@
 
             var remoteUserScored = await this.remoteData.GetUserForScoreAsync(remoteHighScore);
             this.RemoteHighScoreUserName = remoteUserScored.Get<string>("displayName");
-            var image = remoteUserScored["Image"] as ParseFile;
-            this.ImageSource = new BitmapImage(new Uri(image.Url.AbsoluteUri));
+            if (remoteUserScored.Keys.Count > 2)
+            {
+                var image = remoteUserScored["Image"] as ParseFile;
+                if (image != null)
+                {
+                    this.ImageSource = new BitmapImage(new Uri(image.Url.AbsoluteUri));
+                }
+            }
 
             return remoteHighScore.Value;
         }
@@ -224,14 +230,15 @@
                 Value = localHighScore.Value
             };
 
-            var image = new ParseFile(localHighScore.Id + localHighScore.PlayerName + localHighScore.Value, localHighScore.PlayerPhoto);
-
             var user = new User()
             {
-                DisplayName = localHighScore.PlayerName,
-                Image = image
+                DisplayName = localHighScore.PlayerName
             };
-
+            
+            if (localHighScore.PlayerPhoto != null)
+            {
+                user.Image = new ParseFile(localHighScore.Id + localHighScore.PlayerName + localHighScore.Value, localHighScore.PlayerPhoto);
+            }
 
             await this.remoteData.Highscores.AddAsync(highScore);
             await this.remoteData.Users.AddAsync(user);

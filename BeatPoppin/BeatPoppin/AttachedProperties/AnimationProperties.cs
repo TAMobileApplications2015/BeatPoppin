@@ -3,6 +3,7 @@
     using System;
     using Windows.UI;
     using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Media;
     using Windows.UI.Xaml.Shapes;
 
     public class AnimationProperties
@@ -25,8 +26,40 @@
         private static void HandleShapeIsExpiring(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: Better animation for ExpiringShape
+            var obj = d as Shape;
+            obj.Stroke = new SolidColorBrush(Colors.Red);
+            var addStroke = false;
+            var step = 2;
 
-            
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(25);
+            timer.Tick += (snd, args) =>
+            {
+                if (ShapeProperties.GetIsDestroyed(obj))
+                {
+                    timer.Stop();
+                }
+
+                if (addStroke)
+                {
+                    obj.StrokeThickness += 1;
+                }
+                else
+                {
+                    obj.StrokeThickness -= 1;
+                }
+
+                if (obj.StrokeThickness > 10)
+                {
+                    addStroke = false;
+                }
+                else if (obj.StrokeThickness <= 0)
+                {
+                    addStroke = true;
+                }
+            };
+
+            timer.Start();
         }
 
         public static bool GetCircleIsDestroyed(DependencyObject obj)
@@ -49,7 +82,7 @@
             var step = 2;
 
             var timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(500);
+            timer.Interval = TimeSpan.FromMilliseconds(50);
             timer.Tick += (snd, args) =>
             {
                 if (step > StepAnimation || obj.Width < step)
@@ -59,8 +92,8 @@
                 }
                 else
                 {
-                    obj.Width -= step;
-                    obj.Height -= step;
+                    obj.Width += step / 2;
+                    obj.Height += step / 2;
                     obj.Opacity -= 0.1;
                 }
             };
@@ -90,7 +123,7 @@
             var obj = d as Rectangle;
 
             var timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(50);
+            timer.Interval = TimeSpan.FromMilliseconds(30);
             timer.Tick += (snd, args) =>
             {
                 if (step > StepAnimation || obj.Width < step)
@@ -101,11 +134,14 @@
                 else
                 {
                     obj.Width -= step;
-                    obj.Height += step;
-                    obj.Opacity -= 0.01;
+                    obj.Height -= step;
+                    obj.Visibility = obj.Visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
+                    obj.Opacity -= 0.1;
                 }
+
                 step++;
             };
+
             timer.Start();
         }
 

@@ -230,6 +230,12 @@
                 return;
             }
 
+            if (obj.ToString().Length < 3)
+            {
+                Toast.Message("Sorry.", "The name you have entered is too short!", ToastMessageIconsEnum.Frown);
+                return;
+            }
+
             this.currentGame.Value = this.currentGameScore;
             this.currentGame.PlayerName = obj.ToString();
 

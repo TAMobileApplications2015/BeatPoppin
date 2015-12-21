@@ -82,6 +82,7 @@ namespace BeatPoppin.Pages
             catch (System.Net.WebException)
             {
                 Toast.Message("No Connection with the server!", "Please try again later.", ToastMessageIconsEnum.Frown);
+                return;
             }
 
             if (remoteHighScore > 0 && localHighScore > remoteHighScore)
