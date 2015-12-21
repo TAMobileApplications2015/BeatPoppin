@@ -21,11 +21,12 @@
         private MediaCapture _mediaCaptureMgr;
 
         private const double ShapeStartsToExpireAtMilliSeconds = 1000;
-        private const int MaxShapesOnCanvas = 10;
+        private const int MaxShapesOnCanvas = 15;
         private const string PlayerHighScoredMessage = "Yayy!! You are too good ;p";
         private const string PlayerDidNotHighScoredMessage = "Sorry!! Not this time :(";
         private double currentGameStage = 3000;
         private Dictionary<Shape, double> shapesExpirationTime = new Dictionary<Shape, double>();
+        private HashSet<Shape> shapesCurrentlyBeingRemovedWithAnimation = new HashSet<Shape>();
         private Random random = new Random();
 
         public GamePage()
@@ -155,7 +156,7 @@
 
             shapeToAdd.Height = shape.Size;
             shapeToAdd.Width = shape.Size;
-            shapeToAdd.Fill = new SolidColorBrush(Colors.AliceBlue);
+            shapeToAdd.Fill = new SolidColorBrush(Colors.Black);
 
             shapesExpirationTime.Add(shapeToAdd, shape.ExpirationTime);
             var randomLastScoreDigit = this.random.Next(0, 10);
@@ -172,6 +173,11 @@
             foreach (var s in shapes)
             {
                 var shape = s as Shape;
+                if (shapesCurrentlyBeingRemovedWithAnimation.Contains(shape))
+                {
+                    continue;
+                }
+
                 var shapeExpirationTime = shapesExpirationTime[shape];
                 shapesExpirationTime[shape] -= currentIntervalStepTime;
                 if (shapesExpirationTime[shape] <= ShapeStartsToExpireAtMilliSeconds)
@@ -280,14 +286,21 @@
             this.StopPreviewAsBackground();
         }
 
+        private void PrepareShapeForRemoval(Shape shape)
+        {
+            shapesCurrentlyBeingRemovedWithAnimation.Add(shape);
+
+            var shapeValue = ShapeProperties.GetScoreValue(shape);
+            this.ViewModel.CurrentGameScore += shapeValue;
+        }
+
         // FOR TEST PURPOSES ALL HAVE TAPPED EVENT ~~~~~~~~~~
         // CIRCLE PINCH GESTURE
         #region CircleGestures
         private void CircleTapped(object sender, TappedRoutedEventArgs e)
         {
-            var shape = sender as Shape;
-            var shapeValue = ShapeProperties.GetScoreValue(shape);
-            this.ViewModel.CurrentGameScore += shapeValue;
+            var shape = sender as Ellipse;
+            this.PrepareShapeForRemoval(shape);
             AnimationProperties.SetCircleIsDestroyed(shape, true);
         }
 
@@ -301,8 +314,7 @@
             if (e.Delta.Scale > 0)
             {
                 var shape = sender as Ellipse;
-                var shapeValue = ShapeProperties.GetScoreValue(shape);
-                this.ViewModel.CurrentGameScore += shapeValue;
+                this.PrepareShapeForRemoval(shape);
                 AnimationProperties.SetCircleIsDestroyed(shape, true);
             }
         }
@@ -322,9 +334,8 @@
         #region RectangleGestures
         private void RectangleTapped(object sender, TappedRoutedEventArgs e)
         {
-            var shape = sender as Shape;
-            var shapeValue = ShapeProperties.GetScoreValue(shape);
-            this.ViewModel.CurrentGameScore += shapeValue;
+            var shape = sender as Rectangle;
+            this.PrepareShapeForRemoval(shape);
             AnimationProperties.SetRectIsDestroyed(shape, true);
         }
 
@@ -338,8 +349,7 @@
             if (e.Delta.Rotation > 1)
             {
                 var shape = sender as Rectangle;
-                var shapeValue = ShapeProperties.GetScoreValue(shape);
-                this.ViewModel.CurrentGameScore += shapeValue;
+                this.PrepareShapeForRemoval(shape);
                 AnimationProperties.SetRectIsDestroyed(shape, true);
             }
         }
@@ -359,9 +369,8 @@
         #region TriangleGestures
         private void TriangleTapped(object sender, TappedRoutedEventArgs e)
         {
-            var shape = sender as Shape;
-            var shapeValue = ShapeProperties.GetScoreValue(shape);
-            this.ViewModel.CurrentGameScore += shapeValue;
+            var shape = sender as Polygon;
+            this.PrepareShapeForRemoval(shape);
             AnimationProperties.SetTriangleIsDestroyed(shape, true);
         }
 
@@ -375,8 +384,7 @@
             if (e.Delta.Translation.X > 5 || e.Delta.Translation.Y > 5)
             {
                 var shape = sender as Polygon;
-                var shapeValue = ShapeProperties.GetScoreValue(shape);
-                this.ViewModel.CurrentGameScore += shapeValue;
+                this.PrepareShapeForRemoval(shape);
                 AnimationProperties.SetTriangleIsDestroyed(shape, true);
             }
         }

@@ -15,8 +15,8 @@
         private RemoteData remoteData;
         private ICommand saveHighScoreCommand;
 
-        private const int InitialShapesCount = 10;
-        private const int DefaultShapeSize = 100;
+        private const int InitialShapesCount = 1;
+        private const int DefaultShapeSize = 75;
         private const int MinDefaultShapeExpirationTime = 1500;
         private const int MaxDefaultShapeExpirationTime = 3000;
         private long currentGameScore;
@@ -80,13 +80,13 @@
             this.canvasHeight = canvasHeight;
             this.canvasWidth = canvasWidth;
             this.InitGame();
-            this.GetFirstShapes();
+            this.GetFirstShapes(InitialShapesCount);
             return this.shapes;
         }
 
-        private IEnumerable<ShapeBaseViewModel> GetFirstShapes()
+        private IEnumerable<ShapeBaseViewModel> GetFirstShapes(int shapesCount)
         {
-            for (int i = 0; i < InitialShapesCount; i++)
+            for (int i = 0; i < shapesCount; i++)
             {
                 this.GetShapeAtRandomPosition();
             }

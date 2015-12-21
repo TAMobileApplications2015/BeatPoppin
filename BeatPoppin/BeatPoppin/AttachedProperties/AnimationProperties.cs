@@ -49,7 +49,7 @@
                     obj.StrokeThickness -= 1;
                 }
 
-                if (obj.StrokeThickness > 10)
+                if (obj.StrokeThickness > 5)
                 {
                     addStroke = false;
                 }
